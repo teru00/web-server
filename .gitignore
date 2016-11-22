@@ -1,1 +1,4 @@
 .idea/
+build/
+/settings.gradle
+*.iml
