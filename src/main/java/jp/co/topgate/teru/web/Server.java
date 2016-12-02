@@ -30,7 +30,8 @@ public class Server {
             HTTPRequest request = new HTTPRequest(inputStream);
 
             //リクエストを処理する
-            System.out.println(request);
+            HTTPRequestHandler handler = new HTTPRequestHandler();
+            handler.handle(request);
 
             //レスポンスを返す準備
             BufferedOutputStream bo = new BufferedOutputStream(socket.getOutputStream());

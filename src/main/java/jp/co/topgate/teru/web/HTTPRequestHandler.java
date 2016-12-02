@@ -1,9 +1,6 @@
 package jp.co.topgate.teru.web;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 
 /**
  * Created by terufumishimoji on 2016/11/28.
@@ -15,7 +12,6 @@ public class HTTPRequestHandler {
         HTTPResponse response = new HTTPResponse();
 
         if ("GET" === request.getRequestMethod()) {
-            //リソースを取得する
 
             //抽象パスをつくる
             //index.html固定なのがどうか
@@ -23,10 +19,31 @@ public class HTTPRequestHandler {
 
             //リソースがあるか確認する
             if (file.exists()) {
+                byte[] byteContents = null;
+                //データソースをバイトで取得するストリームを生成
+                InputStream is = new FileInputStream(file);
+                //バイト配列にデータを流し込んでくれるストリームを生成
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                //バイトをバッファにためて、byte配列に書き込む。
+                int len;
+                while ((len = is.read()) != -1) {
+                    bao.write(len);
+                }
+                //バイトデータが残っている場合強制的にバッファに書き込む。
+                if (bao != null) {
+                    bao.flush();
+                    bao.close();
+                }
+                //メモリを割り当てて、バイト配列を生成する
+                byteContents = bao.toByteArray();
+
                 //IO
                 //レスポンスステータス決定
                 //レスポンスヘッダー決定
                 //レスポンスボディ生成
+                response.setResponseLine("HTTP/1.1 200 OK");
+                response.setResponseHeader("Content-Type", "text/html");
+                response.setMessageBody(byteContents);
             } else {
                 //Not Found
             }

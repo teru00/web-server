@@ -5,21 +5,17 @@ import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.io.BufferedReader;
 
-
 public class HTTPRequest {
     private InputStream inputStream;
 
-    HTTPRequest(InputStream inputStream) {
+    public HTTPRequest(InputStream inputStream) {
         this.inputStream = inputStream;
     }
-
-    String getRequestMethod() {
+    //リクエストメソッドを抽出
+    public String getRequestMethod() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
             String requestLine = br.readLine();
-            //requestLineから次のSPまで読み込む
-            //subString(int beginIndex, int lastIndex)を利用して、必要なtokenを抽出する
-            //beginIndexは0で、
             String requestMethod = requestLine.substring(0, requestLine.indexOf(" "));
             return requestMethod;
         } catch (IOException e) {
@@ -29,13 +25,11 @@ public class HTTPRequest {
             return str;
         }
     }
-
-    String getRequestURI() {
+    //リクエストURIを抽出
+    public String getRequestURI() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
             String requestLine = br.readLine();
-            //リファクタリング必須。
-            //スペースのマッチ回数を指定できるようにする。
             int startURI = requestLine.indexOf(" ") + 1; //空白以降のindexを返す。
             int endURI = requestLine.indexOf(" ", startURI); //2回目の空白以降から対象文字の一個前のインデックスを検索し返す。
             String requestURI = requestLine.substring(startURI, endURI);
@@ -47,4 +41,7 @@ public class HTTPRequest {
             return str;
         }
     }
+//
+//    public String getQueryString() {}
+//    private String getRequestLine() {}
 }
