@@ -6,6 +6,26 @@ import java.io.File;
  * Created by terufumishimoji on 2016/11/28.
  */
 public class HTTPRequestHandler {
+
+    public String handle(HTTPRequest request) {
+        String message = "file not Found";
+        //requestURIを取得してFileを探す
+        String uri = request.getRequestURI();
+        File file = new File(uri);
+        if (file.exists()) {
+            message = "success";
+            //Fileの読み込みをする
+            //Fileの読み込みが成功
+            //StatusCodeの決定
+            //Content-typeの決定
+        } else {
+            //Fileがない場合
+            //StatusCodeが決定
+            //404のテキストデータを返す
+
+        }
+        return message;
+    }
 //    //requestMethod
 //    private final String GET = "GET";
 //    private final String POST = "POST";
