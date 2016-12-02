@@ -1,16 +1,17 @@
 package jp.co.topgate.teru.web;
 
 import java.io.*;
+import jp.co.topgate.teru.web.HTTPResponse;
 
 /**
  * Created by terufumishimoji on 2016/11/28.
  */
 public class HTTPRequestHandler {
 
+    //リクエストの内容でレスポンスを組み立てる
     public HTTPResponse handle(HTTPRequest request) {
-        //GETかどうかを確認する
-        HTTPResponse response = new HTTPResponse();
 
+        //GETかどうかを確認する
         if ("GET" === request.getRequestMethod()) {
 
             //抽象パスをつくる
@@ -37,17 +38,18 @@ public class HTTPRequestHandler {
                 //メモリを割り当てて、バイト配列を生成する
                 byteContents = bao.toByteArray();
 
-                //IO
-                //レスポンスステータス決定
-                //レスポンスヘッダー決定
-                //レスポンスボディ生成
-                response.setResponseLine("HTTP/1.1 200 OK");
+                //レスポンス組み立て
+                HTTPResponse response = new HTTPResponse();
+                response.setStatusLine("HTTP/1.1 200 OK");
                 response.setResponseHeader("Content-Type", "text/html");
                 response.setMessageBody(byteContents);
             } else {
                 //Not Found
             }
 
+        } else {
+            //405
+            //許可されていないHTTPメソッド
         }
         return response;
     }
