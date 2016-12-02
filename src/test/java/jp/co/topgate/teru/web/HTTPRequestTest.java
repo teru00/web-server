@@ -1,6 +1,10 @@
 package jp.co.topgate.teru.web;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -17,7 +21,7 @@ public class HTTPRequestTest {
         InputStream rm = new ByteArrayInputStream(requestMessage.getBytes());
         HTTPRequest request = new HTTPRequest(rm);
         String requestMethod = request.getRequestMethod();
-        assertEquals("GET", requestMethod);
+        assertThat(requestMethod, is("GET"));
     }
 
     @Test

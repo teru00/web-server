@@ -1,30 +1,38 @@
 package jp.co.topgate.teru.web;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * Created by terufumishimoji on 2016/11/28.
  */
 public class HTTPRequestHandler {
 
-    public String handle(HTTPRequest request) {
-        String message = "file not Found";
-        //requestURIを取得してFileを探す
-        String uri = request.getRequestURI();
-        File file = new File(uri);
-        if (file.exists()) {
-            message = "success";
-            //Fileの読み込みをする
-            //Fileの読み込みが成功
-            //StatusCodeの決定
-            //Content-typeの決定
-        } else {
-            //Fileがない場合
-            //StatusCodeが決定
-            //404のテキストデータを返す
+    public HTTPResponse handle(HTTPRequest request) {
+        //GETかどうかを確認する
+        HTTPResponse response = new HTTPResponse();
+
+        if ("GET" === request.getRequestMethod()) {
+            //リソースを取得する
+
+            //抽象パスをつくる
+            //index.html固定なのがどうか
+            File file = new File("/src/main/resources/" + request.getRequestURI() + "index.html");
+
+            //リソースがあるか確認する
+            if (file.exists()) {
+                //IO
+                //レスポンスステータス決定
+                //レスポンスヘッダー決定
+                //レスポンスボディ生成
+            } else {
+                //Not Found
+            }
 
         }
-        return message;
+        return response;
     }
 //    //requestMethod
 //    private final String GET = "GET";
