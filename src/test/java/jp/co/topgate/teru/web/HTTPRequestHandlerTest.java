@@ -11,13 +11,13 @@
 //
 //public class HTTPRequestHandlerTest {
 //    @Test
-//    public void testHandle() {
+//    public void readFile() {
 //        HTTPRequestHandler handler = new HTTPRequestHandler();
 //        String requestMessage = "GET / HTTP/1.1";
 //        InputStream rm = new ByteArrayInputStream(requestMessage.getBytes());
 //        HTTPRequest request = new HTTPRequest(rm);
 //        String result = handler.handle(request);
-////        assertThat("", is());
+//        assertThat("", is());
 //        assertEquals("success", result);
 //    }
 //}

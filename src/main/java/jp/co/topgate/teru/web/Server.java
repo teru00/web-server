@@ -6,8 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.InputStream;
 
-import jp.co.topgate.teru.web.HTTPRequestHandler;
-
 public class Server {
 
     //サーバクラスのフィールド
