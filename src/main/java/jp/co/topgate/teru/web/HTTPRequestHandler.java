@@ -1,11 +1,17 @@
 package jp.co.topgate.teru.web;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 class HTTPRequestHandler {
 
     //リクエストの内容でレスポンスを組み立てる
-    HTTPResponse handle(HTTPRequest request) throws IOException {
+    public HTTPResponse handle(HTTPRequest request) throws IOException {
 
         HTTPResponse response = new HTTPResponse();
 
@@ -14,17 +20,18 @@ class HTTPRequestHandler {
 
             //抽象パス=をつくる
             //index.html固定なのがどうか
-            File file = new File("/src/main/resources/" + request.getRequestURI() + "index.html");
+            File file = new File("/Users/e125761/work/java/web-server/src/main/resources" + request.getRequestURI() + "index.html");
 
-            //リソースがあるか確認する
+            //リソースの有無を確認する
             if (file.exists()) {
                 //入力ストリームとメモリへの出力ストリーム
-                InputStream is = new FileInputStream(file);
+                InputStream inputStream = new FileInputStream(file);
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
                 //出力ストリームの内部領域にデータを積んでいく
                 int len; //なぜlenか？
-                while ((len = is.read()) != -1) {
+                //バイトデータを取得し、バッファに書き込む。
+                while ((len = inputStream.read()) != -1) {
                     byteArrayOutputStream.write(len);
                 }
                 if (byteArrayOutputStream != null) {
@@ -35,20 +42,42 @@ class HTTPRequestHandler {
                 //コンテンツ
                 byte[] byteContent = byteArrayOutputStream.toByteArray();
 
-                String statusLine = "HTTP/1.1 200 OK";
-                String headers = "Content-Type: text/html";
+                //役目を終えたので、close
+                inputStream.close();
+
+                //200レスポンス要素を設定する
+                response.setStatusLine("HTTP/1.1 200 OK");
+                response.setResponseHeader("Content-Type", getContentType(file.getName()));
                 response.setMessageBody(byteContent);
 
             } else {
-                //Not Found
-                System.out.println("404 Not Found");
+                response.setStatusLine("HTTP/1.1 404 OK");
+                response.setResponseHeader("Content-Type", "text/html");
+                response.setMessageBody("404 Not Found".getBytes());
             }
 
         } else {
-            //405
-            //許可されていないHTTPメソッド
-            System.out.println("405");
+            response.setStatusLine("HTTP/1.1 200 OK");
+            response.setResponseHeader("Content-Type", "text/html");
+            response.setMessageBody("HTTP 405 Error Method not allowed Explained".getBytes());
         }
         return response;
     }
+    public String getContentType(String filename) {
+        //ファイル名から拡張子を抽出する
+        Map<String, String> contentType = new HashMap<String, String>() {
+            {
+                //リクエストの度に毎回読み込んでるからメモリ浪費するな。(改善点)
+                put("html", "text/html");
+                put("css", "text/css");
+                put("jpeg", "image/jpeg");
+                put("png", "image/png");
+                //後幾つかあるよ。
+            }
+        };
+        String extension = filename.substring(filename.lastIndexOf(".") + 1);
+        //拡張子をKとして対応するVを返してあげる。
+        return contentType.get(extension);
+    }
+
 }

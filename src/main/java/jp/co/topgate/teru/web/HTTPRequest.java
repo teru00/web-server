@@ -8,40 +8,39 @@ import java.io.BufferedReader;
 public class HTTPRequest {
     private InputStream inputStream;
 
+    /*
+    フィールド
+        リクエストライン
+     */
+
+    private String[] requestLine;
+
     public HTTPRequest(InputStream inputStream) {
         this.inputStream = inputStream;
+        //リクエストメッセージの読み込み
+        this.setRequestElements();
+    }
+    public void setRequestElements() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
+        //1行目を読み込む
+        String line = null;
+        try {
+            line = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Method,URI,Versionに分ける
+        this.requestLine = line.split(" ");
     }
     //リクエストメソッドを抽出
     public String getRequestMethod() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
-            String requestLine = br.readLine();
-            String requestMethod = requestLine.substring(0, requestLine.indexOf(" "));
-            return requestMethod;
-        } catch (IOException e) {
-            //保留
-            System.err.println(e);
-            String str = "error";
-            return str;
-        }
+        return this.requestLine[0];
     }
+
     //リクエストURIを抽出
     public String getRequestURI() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
-            String requestLine = br.readLine();
-            int startURI = requestLine.indexOf(" ") + 1; //空白以降のindexを返す。
-            int endURI = requestLine.indexOf(" ", startURI); //2回目の空白以降から対象文字の一個前のインデックスを検索し返す。
-            String requestURI = requestLine.substring(startURI, endURI);
-            return requestURI;
-        } catch (IOException e) {
-            //保留
-            System.err.println(e);
-            String str = "error";
-            return str;
-        }
+        return this.requestLine[1];
     }
-//
 //    public String getQueryString() {}
 //    private String getRequestLine() {}
 }

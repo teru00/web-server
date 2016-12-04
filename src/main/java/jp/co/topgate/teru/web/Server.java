@@ -2,50 +2,51 @@ package jp.co.topgate.teru.web;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.InputStream;
 
 public class Server {
 
-    //サーバクラスのフィールド
-    //private static final int PORT = 8080;
-    private static final String CRLF = "\r\n";
+    private static final int PORT = 8080;
+    //private static final String CRLF = "\n";
 
     public static void main(String[] args) {
         System.out.println("Running My WebServer");
         try {
             //ServerSocketでリスナー用意
-            ServerSocket serverSocket = new ServerSocket();
+            ServerSocket serverSocket = new ServerSocket(PORT);
 
-            //クライアントソケット取得
-            Socket socket = serverSocket.accept();
+            //リクエストを待ち続ける
+            while (true) {
+                //クライアントソケット取得
+                Socket socket = serverSocket.accept();
 
-            //クライアントソケットからデータソースのIOを扱うストリーム取得
-            InputStream inputStream = socket.getInputStream();
+                //クライアントソケットからデータソースのIOを扱うストリーム取得
+                InputStream inputStream = socket.getInputStream();
 
-            //リクエストオブジェクトを生成
-            HTTPRequest request = new HTTPRequest(inputStream);
+                //リクエストオブジェクトを生成
+                HTTPRequest request = new HTTPRequest(inputStream);
 
-            //リクエストを処理する
-            HTTPRequestHandler handler = new HTTPRequestHandler();
-            handler.handle(request);
+                //リクエストを処理する
+                HTTPRequestHandler handler = new HTTPRequestHandler();
+                //HTTPRequestは参照型なので引数に渡してもおｋ
+                HTTPResponse response = handler.handle(request);
 
-            //レスポンスを返す準備
-            BufferedOutputStream bo = new BufferedOutputStream(socket.getOutputStream());
+                //レスポンスを返す準備
+                BufferedOutputStream bo = new BufferedOutputStream(socket.getOutputStream());
 
-            //レスポンスの構成要素
-            String line = "HTTP/1.1 200 OK " + CRLF;
-            String headers = "Content-Type: text/html " + CRLF;
-            String crlf = CRLF;
-            String body = "<h1>Hello, World</h1>";
+                //レスポンスメッセージを取得する
+                byte[] responseMessage = response.getResponseMessage();
 
-            //Socketに書き込んでいく。
-            bo.write(line.getBytes());
-            bo.write(headers.getBytes());
-            bo.write(crlf.getBytes());
-            bo.write(body.getBytes());
-
+                //Socketに書き込んでいく。
+                if (responseMessage != null) {
+                    bo.write(responseMessage);
+                    //バッファに残っているもの強制的に書き込み
+                    bo.flush();
+                    bo.close();
+                }
+            }
         } catch (IOException e) {
             System.err.println(e);
         }
