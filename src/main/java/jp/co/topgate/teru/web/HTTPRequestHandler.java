@@ -25,9 +25,9 @@ class HTTPRequestHandler {
 
             String requestURI = request.getRequestURI();
             if (requestURI.equals("/")) {
-                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI + "index.html";
+                pathname = "/Users/terufumishimoji/IdeaProjects/simple-web-server/src/main/resources" + requestURI + "index.html";
             } else {
-                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI;
+                pathname = "/Users/terufumishimoji/IdeaProjects/simple-web-server/src/main/resources" + requestURI;
             }
             file = new File(pathname);
 

@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  */
 public class HTTPRequest {
 
-    private InputStream inputStream;
+    //private InputStream inputStream;
 
     /*
     HTTPリクエストの1行目
@@ -21,20 +21,23 @@ public class HTTPRequest {
     private String[] requestLine;
 
     public HTTPRequest(InputStream inputStream) {
-        this.inputStream = inputStream;
+        //this.inputStream = inputStream;
         //リクエストメッセージの読み込み
-        this.init();
+        this.init(inputStream);
     }
-    public void init() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
+    public void init(InputStream inputStream) {
+        //クライアントソケットに関連づいた入力ストリームをバッファでラッパ
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        System.out.println("今から入力ストリーム経由でデータを取得します");
         //1行目を読み込む
         String line = null;
         try {
             line = br.readLine();
         } catch (IOException e) {
+            System.err.println("ERROR: " + e);
             e.printStackTrace();
         }
-        //Method,URI,Versionに分ける
+        //リクエストラインを分割
         this.requestLine = line.split(" ");
     }
     //リクエストメソッドを抽出

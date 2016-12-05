@@ -10,10 +10,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class HTTPRequestTest {
-    //リクエストインスタン生成
-    //引数にはDUMMYのリクエストメッセージを渡す
-    //リクエストメッセージはStringで書いて、inputStreamに変換する。
-    //そしてgetRequestMessageを呼びだす。
+
+    //リクエストメソッドを正しく取得できているか判定
     @Test
     public void testGetRequestMethod() {
         String requestMessage = "GET / HTTP/1.1";
@@ -23,6 +21,7 @@ public class HTTPRequestTest {
         assertThat(requestMethod, is("GET"));
     }
 
+    //リクエストURIを正しく取得できているか判定
     @Test
     public void testGetRequestURI() {
         String requestMessage = "GET /search/store/index.html HTTP/1.1";

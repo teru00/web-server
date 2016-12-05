@@ -11,15 +11,9 @@ import java.net.Socket;
  * サーバークラス
  */
 public class Server {
-    /**
-     * ポート番号
-     */
+    //ポート番号
     private static final int PORT = 8080;
-    //private static final String CRLF = "\n";
 
-    /**
-     * メインメソッド：JVMが最初にロードするプログラム
-     */
     public static void main(String[] args) {
         System.out.println("Webサーバ起動>>>");
         try {
@@ -30,6 +24,7 @@ public class Server {
             while (true) {
                 //クライアントソケット取得
                 Socket socket = serverSocket.accept();
+                System.out.println("リクエストメッセージを受信しました。");
 
                 //クライアントソケットからデータソースのIOを扱うストリーム取得
                 InputStream inputStream = socket.getInputStream();
@@ -47,17 +42,21 @@ public class Server {
 
                 //レスポンスメッセージを取得する
                 byte[] responseMessage = response.getResponseMessage();
+                System.out.println("レスポンスメッセージを取得しました。");
 
                 //Socketに書き込んでいく。
                 if (responseMessage != null) {
                     bo.write(responseMessage, 0, responseMessage.length);
                     //バッファに残っているもの強制的に書き込み
                     bo.flush();
+                    System.out.println("レスポンスメッセージを送信しました。");
+                    //ストリームに関連したSocketを解放
                     bo.close();
+                    System.out.println("ソケットを解放しました。");
                 }
             }
         } catch (IOException e) {
-            System.err.println(e);
+            System.err.println("ERROR: " + e);
             e.printStackTrace();
         }
         System.out.println(">>>Webサーバをシャットダウン...");

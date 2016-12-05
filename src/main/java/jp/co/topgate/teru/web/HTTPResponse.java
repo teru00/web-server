@@ -44,7 +44,7 @@ public class HTTPResponse {
         //レスポンスヘッダーとレスポンスボディの間の空白行
         final String CRLF = "\n";
 
-        byte[] responseHeader = (this.statusLine + "\n" + this.getResponseHeaders() + "\n" + CRLF).getBytes();
+        byte[] responseHeader = (this.statusLine + "\n" + this.getResponseHeaders() + CRLF).getBytes();
         byte[] responseMessage = new byte[responseHeader.length + this.messageBody.length];
 
         //ヘッダーの各要素をマージする
