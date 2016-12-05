@@ -1,12 +1,6 @@
 package jp.co.topgate.teru.web;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
 
 /**
  * リクエストオブジェクトを分析して、適切なレスポンスを組み立てるハンドラクラス。
@@ -69,7 +63,7 @@ class HTTPRequestHandler {
 
                 //200レスポンス要素を設定する
                 response.setStatusLine("HTTP/1.1 200 OK");
-                response.setHeader("Content-Type", getContentType(file.getName()));
+                response.setHeader("Content-Type", response.getContentType(file.getName()));
                 response.setMessageBody(byteContent);
 
             } else {
@@ -85,31 +79,4 @@ class HTTPRequestHandler {
         }
         return response;
     }
-
-    /**
-     * 指定されたwebリソースの拡張子を抽出して、Content Typeを決定する。
-     * このContent Typeはブラウザが読み込んだリソースを認識するのに役立つ。
-     *
-     * @param filename Content Typeを決定するために必要なリソースファイル名
-     * @return なし
-     */
-    public String getContentType(String filename) {
-        //ファイル名から拡張子を抽出する
-        Map<String, String> contentType = new HashMap<String, String>() {
-            {
-                //リクエストの度に毎回読み込んでるからメモリ浪費するな。(改善点)
-                put("html", "text/html");
-                put("css", "text/css");
-                put("jpeg", "image/jpeg");
-                put("png", "image/png");
-                put("gif", "image/gif");
-                put("js", "application/javascript");
-                //後幾つかあるよ。
-            }
-        };
-        String extension = filename.substring(filename.lastIndexOf(".") + 1);
-        //拡張子をKとして対応するVを返してあげる。
-        return contentType.get(extension);
-    }
-
 }
