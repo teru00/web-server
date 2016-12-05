@@ -8,12 +8,22 @@ import java.net.Socket;
 
 /**
  * @author terufumi shimoji
- * サーバークラス
+ *
+ * TCPの受付、リクエスト単位でレスポンスを組み立てるハンドラオブジェクトを呼び出すクラス。
+ * サーバのライフサイクルを管理する。
  */
 public class Server {
-    //ポート番号
+    /**
+     *
+     * ポート番号
+     * サーバーソケットで利用するポートの番号
+     */
     private static final int PORT = 8080;
 
+    /**
+     *
+     * メインメソッド
+     */
     public static void main(String[] args) {
         System.out.println("Webサーバ起動>>>");
         try {

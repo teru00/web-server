@@ -8,8 +8,20 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * リクエストオブジェクトを分析して、適切なレスポンスを組み立てるハンドラクラス。
+ *
+ */
 class HTTPRequestHandler {
 
+    /**
+     * 受信したリクエストを分析して適切なレスポンスを組み立てるためのインスタンスメソッド。
+     * リクエストURIに応じて、リソースファイルの読み込みを行う。
+     *
+     * @param request HTTPRequestオブジェクト
+     * @return response HTTPResponseオブジェクト
+     * @throws IOException
+     */
     //リクエストの内容でレスポンスを組み立てる
     public HTTPResponse handle(HTTPRequest request) throws IOException {
 
@@ -25,14 +37,15 @@ class HTTPRequestHandler {
 
             String requestURI = request.getRequestURI();
             if (requestURI.equals("/")) {
-                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI + "index.html";
+                pathname = "src/main/resources" + requestURI + "index.html";
             } else {
-                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI;
+                pathname = "src/main/resources" + requestURI;
             }
             file = new File(pathname);
 
             //リソースの有無を確認する
             if (file.exists()) {
+                System.out.println("リソースは存在しました。");
                 //入力ストリームとメモリへの出力ストリーム
                 InputStream inputStream = new FileInputStream(file);
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -72,6 +85,14 @@ class HTTPRequestHandler {
         }
         return response;
     }
+
+    /**
+     * 指定されたwebリソースの拡張子を抽出して、Content Typeを決定する。
+     * このContent Typeはブラウザが読み込んだリソースを認識するのに役立つ。
+     *
+     * @param filename Content Typeを決定するために必要なリソースファイル名
+     * @return なし
+     */
     public String getContentType(String filename) {
         //ファイル名から拡張子を抽出する
         Map<String, String> contentType = new HashMap<String, String>() {
