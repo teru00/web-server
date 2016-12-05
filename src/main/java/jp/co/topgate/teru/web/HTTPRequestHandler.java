@@ -20,7 +20,16 @@ class HTTPRequestHandler {
 
             //抽象パス=をつくる
             //index.html固定なのがどうか
-            File file = new File("/Users/e125761/work/java/web-server/src/main/resources" + request.getRequestURI() + "index.html");
+            File file;
+            String pathname;
+
+            String requestURI = request.getRequestURI();
+            if (requestURI.equals("/")) {
+                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI + "index.html";
+            } else {
+                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI;
+            }
+            file = new File(pathname);
 
             //リソースの有無を確認する
             if (file.exists()) {
@@ -72,6 +81,7 @@ class HTTPRequestHandler {
                 put("css", "text/css");
                 put("jpeg", "image/jpeg");
                 put("png", "image/png");
+                put("js", "application/javascript");
                 //後幾つかあるよ。
             }
         };

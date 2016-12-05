@@ -1,26 +1,31 @@
 package jp.co.topgate.teru.web;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
+/**
+ * @author terufumi shimoji
+ *
+ * HTTPリクエストを表現するクラス
+ */
 public class HTTPRequest {
+
     private InputStream inputStream;
 
     /*
-    フィールド
-        リクエストライン
-     */
-
+    HTTPリクエストの1行目
+    最低限のWebサーバはこのリクエストラインを解析できればよい。
+    */
     private String[] requestLine;
 
     public HTTPRequest(InputStream inputStream) {
         this.inputStream = inputStream;
         //リクエストメッセージの読み込み
-        this.setRequestElements();
+        this.init();
     }
-    public void setRequestElements() {
+    public void init() {
         BufferedReader br = new BufferedReader(new InputStreamReader(this.inputStream));
         //1行目を読み込む
         String line = null;
@@ -39,8 +44,13 @@ public class HTTPRequest {
 
     //リクエストURIを抽出
     public String getRequestURI() {
-        return this.requestLine[1];
+        //クエリパラメータ削除
+        String requestURI;
+        if (requestLine[1].contains("?")) {
+            requestURI = this.requestLine[1].substring(0, requestLine[1].indexOf("?"));
+        } else {
+            requestURI = this.requestLine[1];
+        }
+        return requestURI;
     }
-//    public String getQueryString() {}
-//    private String getRequestLine() {}
 }

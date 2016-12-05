@@ -6,18 +6,27 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * @author terufumi shimoji
+ * サーバークラス
+ */
 public class Server {
-
+    /**
+     * ポート番号
+     */
     private static final int PORT = 8080;
     //private static final String CRLF = "\n";
 
+    /**
+     * メインメソッド：JVMが最初にロードするプログラム
+     */
     public static void main(String[] args) {
-        System.out.println("Running My WebServer");
+        System.out.println("Webサーバ起動>>>");
         try {
             //ServerSocketでリスナー用意
             ServerSocket serverSocket = new ServerSocket(PORT);
 
-            //リクエストを待ち続ける
+            //（改善点）TCP受付スレッドとリクエスト処理スレッドを分割すべき
             while (true) {
                 //クライアントソケット取得
                 Socket socket = serverSocket.accept();
@@ -41,7 +50,7 @@ public class Server {
 
                 //Socketに書き込んでいく。
                 if (responseMessage != null) {
-                    bo.write(responseMessage);
+                    bo.write(responseMessage, 0, responseMessage.length);
                     //バッファに残っているもの強制的に書き込み
                     bo.flush();
                     bo.close();
@@ -49,7 +58,8 @@ public class Server {
             }
         } catch (IOException e) {
             System.err.println(e);
+            e.printStackTrace();
         }
-        System.out.println("ShutDown My WebServer");
+        System.out.println(">>>Webサーバをシャットダウン...");
     }
 }
