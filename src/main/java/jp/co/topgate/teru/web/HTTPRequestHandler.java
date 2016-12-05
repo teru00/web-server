@@ -34,10 +34,10 @@ class HTTPRequestHandler {
             //index.html固定なのがどうか
             File file;
             String pathname;
-
+            //対応しているパターン
             String requestURI = request.getRequestURI();
-            if (requestURI.equals("/")) {
-                pathname = "src/main/resources" + requestURI + "index.html";
+            if (requestURI.endsWith("/")) {
+                pathname = "src/main/resources" + requestURI.replaceAll("/+", "/") + "index.html";
             } else {
                 pathname = "src/main/resources" + requestURI;
             }

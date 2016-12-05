@@ -14,11 +14,13 @@ public class HTTPResponse {
      * e.g.) HTTP/1.1 200 OK
      */
     private String statusLine;
+
     /**
      * レスポンスヘッダーフィールドを表す。
      * e.g) Content Type: text/html
      */
     private Map<String, String> headersField = new HashMap<String, String>();
+
     /**
      * レスポンスボディを表す。
      */

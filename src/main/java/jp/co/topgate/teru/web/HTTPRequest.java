@@ -40,16 +40,13 @@ public class HTTPRequest {
         //クライアントソケットに関連づいた入力ストリームをバッファでラッパ
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         System.out.println("今から入力ストリーム経由でデータを取得します");
-        //1行目を読み込む
-        String line = null;
         try {
-            line = br.readLine();
+            String line = br.readLine();
+            this.requestLine = line.split(" ");
         } catch (IOException e) {
-            System.err.println("ERROR: " + e);
-            e.printStackTrace();
+            System.err.println("ERROR: "+ e);
+            e.getStackTrace();
         }
-        //リクエストラインを分割
-        this.requestLine = line.split(" ");
     }
 
     /**
@@ -76,5 +73,11 @@ public class HTTPRequest {
             requestURI = this.requestLine[1];
         }
         return requestURI;
+    }
+    /**
+     * テスト用メソッド
+     */
+    public String[] getRequestLine() {
+        return this.requestLine;
     }
 }
