@@ -102,6 +102,7 @@ class HTTPRequestHandler {
                 put("css", "text/css");
                 put("jpeg", "image/jpeg");
                 put("png", "image/png");
+                put("gif", "image/gif");
                 put("js", "application/javascript");
                 //後幾つかあるよ。
             }
