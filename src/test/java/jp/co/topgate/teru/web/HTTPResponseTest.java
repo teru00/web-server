@@ -8,11 +8,11 @@ import static org.junit.Assert.assertThat;
 //テストクラス
 public class HTTPResponseTest {
     @Test
-    public void testGetHeaders() {
+    public void getHeaders() {
         StringBuilder buff = new StringBuilder();
         buff.append("Content-Type: text/html\n");
         HTTPResponse response = new HTTPResponse();
-        response.setResponseHeader("Content-Type", "text/html");
-        assertThat(response.getResponseHeaders(), CoreMatchers.is(buff.toString()));
+        response.setHeader("Content-Type", "text/html");
+        assertThat(response.getheadersField(), CoreMatchers.is(buff.toString()));
     }
 }

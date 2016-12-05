@@ -25,9 +25,9 @@ class HTTPRequestHandler {
 
             String requestURI = request.getRequestURI();
             if (requestURI.equals("/")) {
-                pathname = "/Users/terufumishimoji/IdeaProjects/simple-web-server/src/main/resources" + requestURI + "index.html";
+                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI + "index.html";
             } else {
-                pathname = "/Users/terufumishimoji/IdeaProjects/simple-web-server/src/main/resources" + requestURI;
+                pathname = "/Users/e125761/work/java/web-server/src/main/resources" + requestURI;
             }
             file = new File(pathname);
 
@@ -56,18 +56,18 @@ class HTTPRequestHandler {
 
                 //200レスポンス要素を設定する
                 response.setStatusLine("HTTP/1.1 200 OK");
-                response.setResponseHeader("Content-Type", getContentType(file.getName()));
+                response.setHeader("Content-Type", getContentType(file.getName()));
                 response.setMessageBody(byteContent);
 
             } else {
-                response.setStatusLine("HTTP/1.1 404 OK");
-                response.setResponseHeader("Content-Type", "text/html");
+                response.setStatusLine("HTTP/1.1 404 Not Found");
+                response.setHeader("Content-Type", "text/html");
                 response.setMessageBody("404 Not Found".getBytes());
             }
 
         } else {
-            response.setStatusLine("HTTP/1.1 200 OK");
-            response.setResponseHeader("Content-Type", "text/html");
+            response.setStatusLine("HTTP/1.1 405 Method not allowed Explained");
+            response.setHeader("Content-Type", "text/html");
             response.setMessageBody("HTTP 405 Error Method not allowed Explained".getBytes());
         }
         return response;

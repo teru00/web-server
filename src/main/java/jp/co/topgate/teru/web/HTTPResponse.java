@@ -6,32 +6,30 @@ import java.util.Map;
 public class HTTPResponse {
     //レスポンスの状態データ
     private String statusLine;
-    private Map<String, String> responseHeaders = new HashMap<String, String>();
+    private Map<String, String> headersField = new HashMap<String, String>();
     private byte[] messageBody;
 
     public void setStatusLine(String statusLine) {
         this.statusLine = statusLine;
     }
 
-    public void setResponseHeader(String name, String value) {
+    public void setHeader(String name, String value) {
         //引数KVをMapのKVに設定する
-        this.responseHeaders.put(name, value);
+        this.headersField.put(name, value);
     }
-    public void addResponseHeader(String name, String value) {
-        this.responseHeaders.put(name, value);
+    public void addHeader(String name, String value) {
+        this.headersField.put(name, value);
     }
     //レスポンスヘッダーを文字列で取得する
-    public String getResponseHeaders() {
-        final String CRLF = "\n";
+    public String getheadersField() {
         StringBuilder buff = new StringBuilder();
 
-        for(String key: this.responseHeaders.keySet()) {
+        for(String key: this.headersField.keySet()) {
             buff.append(key);
             buff.append(": ");
-            buff.append(this.responseHeaders.get(key));
-            buff.append(CRLF);
+            buff.append(this.headersField.get(key));
+            buff.append("\n");
         }
-
         return buff.toString();
     }
 
@@ -44,7 +42,7 @@ public class HTTPResponse {
         //レスポンスヘッダーとレスポンスボディの間の空白行
         final String CRLF = "\n";
 
-        byte[] responseHeader = (this.statusLine + "\n" + this.getResponseHeaders() + CRLF).getBytes();
+        byte[] responseHeader = (this.statusLine + "\n" + this.getheadersField() + CRLF).getBytes();
         byte[] responseMessage = new byte[responseHeader.length + this.messageBody.length];
 
         //ヘッダーの各要素をマージする
@@ -53,27 +51,4 @@ public class HTTPResponse {
 
         return responseMessage;
     }
-
-//        //レスポンスメッセージをバイトデータで返す
-//        Byte[] statusLine = this.statusLine.getBytes();
-//        Byte[] responseHeaders = this.getResponseHeaders().getBytes();
-//        Byte[] messageBody = this.messageBody;
-//        return this.mergeResponseElements(statusLine, responseHeaders, messageBody);
-//    }
-
-    //(R)ステータスラインーとレスポンスヘッダーをマージする
-//    private String getResponseHeader() {}
-
-    //バイト配列マージ専用処理
-//    private Byte[] mergeResponseElements(Byte[] statusLine, Byte[] responseHeaders, Byte[] messageBody) {
-//        //レスポンスの構成要素をマージする
-//        Byte[] crlf;
-//        Byte[] responseMessage = new byte[statusLine.length + responseHeaders.length + crlf.length + messageBody.length];
-//        //マージする
-//        System.arraycopy(statusLine,0,responseMessage,0,statusLine.length);
-//        System.arraycopy(responseHeaders,0,responseMessage,statusLine.length, responseHeaders.length);
-//        System.arraycopy(crlf,0,responseMessage,responseHeaders.length, crlf.length);
-//        System.arraycopy(messageBody,0,responseMessage,crlf.length, messageBody.length);
-//        return responseMessage;
-//    }
 }

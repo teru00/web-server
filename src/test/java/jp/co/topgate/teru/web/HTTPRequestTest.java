@@ -13,7 +13,7 @@ public class HTTPRequestTest {
 
     //リクエストメソッドを正しく取得できているか判定
     @Test
-    public void testGetRequestMethod() {
+    public void getRequestMethod() {
         String requestMessage = "GET / HTTP/1.1";
         InputStream rm = new ByteArrayInputStream(requestMessage.getBytes());
         HTTPRequest request = new HTTPRequest(rm);
@@ -23,7 +23,7 @@ public class HTTPRequestTest {
 
     //リクエストURIを正しく取得できているか判定
     @Test
-    public void testGetRequestURI() {
+    public void getRequestURI() {
         String requestMessage = "GET /search/store/index.html HTTP/1.1";
         InputStream rm = new ByteArrayInputStream(requestMessage.getBytes());
         HTTPRequest request = new HTTPRequest(rm);
