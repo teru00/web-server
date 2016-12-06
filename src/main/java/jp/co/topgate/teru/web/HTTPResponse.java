@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *　クライアントに送信するHTTPレスポンスを生成するクラス。
  *
+ *　クライアントに送信するHTTPレスポンスを生成するクラス。
  */
 public class HTTPResponse {
 
@@ -85,13 +85,11 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * @return responseMessage
      */
     public byte[] getResponseMessage() {
-        //レスポンスヘッダーとレスポンスボディの間の空白行
         final String CRLF = "\n";
 
         byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
         byte[] responseMessage = new byte[responseHeader.length + this.messageBody.length];
 
-        //ヘッダーの各要素をマージする
         System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
         System.arraycopy(this.messageBody, 0, responseMessage, responseHeader.length, this.messageBody.length);
 
@@ -106,10 +104,8 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * @return なし
      */
     public String getContentType(String filename) {
-        //ファイル名から拡張子を抽出する
         Map<String, String> contentType = new HashMap<String, String>() {
             {
-                //リクエストの度に毎回読み込んでるからメモリ浪費するな。(改善点)
                 put("html", "text/html");
                 put("css", "text/css");
                 put("jpeg", "image/jpeg");
@@ -120,7 +116,6 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
             }
         };
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
-        //拡張子をKとして対応するVを返してあげる。
         return contentType.get(extension);
     }
 }

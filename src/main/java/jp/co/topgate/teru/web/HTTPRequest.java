@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author terufumi shimoji
- *
  * クライアントから取得したHTTPリクエストの状態や
  * レスポンスを送信するための振る舞いを持つクラス。
  */
@@ -34,14 +32,12 @@ public class HTTPRequest {
      * @param inputStream
      */
     public void init(InputStream inputStream) {
-        //クライアントソケットに関連づいた入力ストリームをバッファでラッパ
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         System.out.println("今から入力ストリーム経由でデータを取得します");
         try {
             String line = br.readLine();
             this.requestLine = line.split(" ");
 
-            //ログ
             System.out.println("リクエストメッセージ===========");
             System.out.println(line);
             while(line != null  && !line.isEmpty()) {
@@ -72,7 +68,6 @@ public class HTTPRequest {
      * @return
      */
     public String getRequestURI() {
-        //クエリパラメータ削除（URLで指定されるクエリはURIではない。）
         String requestURI;
         if (requestLine[1].contains("?")) {
             requestURI = this.requestLine[1].substring(0, requestLine[1].indexOf("?"));

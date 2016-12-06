@@ -3,12 +3,13 @@ package jp.co.topgate.teru.web;
 import java.io.*;
 
 /**
- * リクエストオブジェクトを分析して、適切なレスポンスを組み立てるハンドラクラス。
  *
+ * リクエストオブジェクトを分析して、適切なレスポンスを組み立てるハンドラクラス。
  */
 class HTTPRequestHandler {
 
     /**
+     *
      * 受信したリクエストを分析して適切なレスポンスを組み立てるためのインスタンスメソッド。
      * リクエストURIに応じて、リソースファイルの読み込みを行う。
      *
@@ -16,26 +17,21 @@ class HTTPRequestHandler {
      * @return response HTTPResponseオブジェクト
      * @throws IOException
      */
-    //リクエストの内容でレスポンスを組み立てる
     public HTTPResponse handle(HTTPRequest request) throws IOException {
 
         HTTPResponse response = new HTTPResponse();
 
-        //GETかどうかを確認する
         if ("GET".equals(request.getRequestMethod())) {
 
             File file = new File(request.getResourcePath());
 
-            //リソースの有無を確認する
             if (file.exists() && file.isFile()) {
                 System.out.println("リソースは存在しました。");
-                //入力ストリームとメモリへの出力ストリーム
+
                 InputStream inputStream = new FileInputStream(file);
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-                //出力ストリームの内部領域にデータを積んでいく
-                int len; //なぜlenか？
-                //バイトデータを取得し、バッファに書き込む。
+                int len;
                 while ((len = inputStream.read()) != -1) {
                     byteArrayOutputStream.write(len);
                 }
@@ -43,14 +39,9 @@ class HTTPRequestHandler {
                     byteArrayOutputStream.flush();
                     byteArrayOutputStream.close();
                 }
-                //バッファに全て格納したら、byte配列としてメモリを確保する。
-                //コンテンツ
                 byte[] byteContent = byteArrayOutputStream.toByteArray();
 
-                //役目を終えたので、close
                 inputStream.close();
-
-                //200レスポンス要素を設定する
                 response.setStatusLine("HTTP/1.1 200 OK");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
                 response.setMessageBody(byteContent);
@@ -59,14 +50,14 @@ class HTTPRequestHandler {
                 System.out.println("リソースは存在しませんでした。");
                 response.setStatusLine("HTTP/1.1 404 Not Found");
                 response.setHeader("Content-Type", "text/html");
-                response.setMessageBody("404 Not Found".getBytes());
+                response.setMessageBody("<h1>404 Not Found</h1>".getBytes());
             }
 
         } else {
             System.out.println("許可されていないHTTPメソッドです。");
             response.setStatusLine("HTTP/1.1 405 Method not allowed Explained");
             response.setHeader("Content-Type", "text/html");
-            response.setMessageBody("HTTP 405 Error Method not allowed Explained".getBytes());
+            response.setMessageBody("<h1>HTTP 405 Error Method not allowed Explained</h1>".getBytes());
         }
         return response;
     }
