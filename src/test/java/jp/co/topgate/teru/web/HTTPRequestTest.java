@@ -87,13 +87,13 @@ public class HTTPRequestTest {
 //        //アサーションする
 //
 //    }
-
-    //init()のテスト
-    @Test
-    public void init() {
-        InputStream inputStream = new ByteArrayInputStream(this.requestMessage.getBytes());
-        HTTPRequest request = new HTTPRequest(inputStream);
-        String[] expect = {"GET", "/", "HTTP/1.1"};
-        assertThat(request.getRequestLine(), is(expect));
-    }
-}
+//
+//    //init()のテスト
+//    @Test
+//    public void init() {
+//        InputStream inputStream = new ByteArrayInputStream(this.requestMessage.getBytes());
+//        HTTPRequest request = new HTTPRequest(inputStream);
+//        String[] expect = {"GET", "/", "HTTP/1.1"};
+//        assertThat(request.getRequestLine(), is(expect));
+//    }
+//}
