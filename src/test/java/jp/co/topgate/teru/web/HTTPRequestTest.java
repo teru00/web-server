@@ -57,23 +57,36 @@ public class HTTPRequestTest {
     }
 
     //リクエストURIを正しく取得できているか判定
-    @Test
-    public void getRequestURI() {
-        String[] requestURIs = new String[6];
-        requestURIs[0] = "/";
-        requestURIs[1] = "/";
-        requestURIs[2] = "/test.html";
-        requestURIs[3] = "/test.html";
-        requestURIs[4] = "/sample/te";
-        requestURIs[5] = "/sample/test.html";
-
-        for (it.hasNext()) {
-            InputStream inputStream = new ByteArrayInputStream(it.next().getBytes());
-            HTTPRequest request = new HTTPRequest(inputStream);
-            String requestURI = request.getRequestURI();
-            assertEquals("/", requestURI);
-        }
-    }
+//    @Test
+//    public void getRequestURI() {
+//        String[] requestURIs = new String[6];
+//        requestURIs[0] = "/";
+//        requestURIs[1] = "/";
+//        requestURIs[2] = "/test.html";
+//        requestURIs[3] = "/test.html";
+//        requestURIs[4] = "/sample/te";
+//        requestURIs[5] = "/sample/test.html";
+//
+//        for (it.hasNext()) {
+//            InputStream inputStream = new ByteArrayInputStream(it.next().getBytes());
+//            HTTPRequest request = new HTTPRequest(inputStream);
+//            String requestURI = request.getRequestURI();
+//            assertEquals("/", requestURI);
+//        }
+//    }
+//
+//    @Test
+//    public void getResourcePath() {
+//        //テストデータ準備
+//        // / /test.html /test.css /sample/ /sample/test.html /sample/test.css /.sample/ /sample
+//        //期待値準備
+//        // /index.html
+//        //レスポンスオブジェクト生成
+//        //レスポンスオブジェクトにURIを設定
+//        //getResourcePathを呼び出す
+//        //アサーションする
+//
+//    }
 
     //init()のテスト
     @Test

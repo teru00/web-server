@@ -45,7 +45,7 @@ public class HTTPResponse {
     }
 
     /**
-     * ヘッダーフィールドを追加するためのインスタンスメソッド
+a     * ヘッダーフィールドを追加するためのインスタンスメソッド
      * @param name
      * @param value
      */

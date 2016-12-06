@@ -14,8 +14,6 @@ import java.io.InputStreamReader;
  */
 public class HTTPRequest {
 
-    //private InputStream inputStream;
-
     /**
      * HTTPリクエストの1行目
      * 最低限のWebサーバはこのリクエストラインを解析できればよい。
@@ -42,6 +40,16 @@ public class HTTPRequest {
         try {
             String line = br.readLine();
             this.requestLine = line.split(" ");
+
+            //ログ
+            System.out.println("リクエストメッセージ===========");
+            System.out.println(line);
+            while(line != null  && !line.isEmpty()) {
+                line = br.readLine();
+                System.out.println(line);
+            }
+            System.out.println("リクエストメッセージ===========");
+
         } catch (IOException e) {
             System.err.println("ERROR: "+ e);
             e.getStackTrace();
@@ -64,7 +72,7 @@ public class HTTPRequest {
      * @return
      */
     public String getRequestURI() {
-        //クエリパラメータ削除
+        //クエリパラメータ削除（URLで指定されるクエリはURIではない。）
         String requestURI;
         if (requestLine[1].contains("?")) {
             requestURI = this.requestLine[1].substring(0, requestLine[1].indexOf("?"));
@@ -73,6 +81,22 @@ public class HTTPRequest {
         }
         return requestURI;
     }
+
+    /**
+     * リクエストURIを分析してリソースまでの適切なパス名を返す
+     * @return resourcePath
+     */
+    public String getResourcePath() {
+        String resourcePath;
+        String requestURI = this.getRequestURI();
+        if (requestURI.endsWith("/")) {
+            resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/") + "index.html";
+        } else {
+            resourcePath = "src/main/resources" + requestURI;
+        }
+        return resourcePath;
+    }
+
     /**
      * テスト用メソッド
      */

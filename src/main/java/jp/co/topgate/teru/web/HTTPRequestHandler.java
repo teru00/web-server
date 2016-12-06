@@ -24,20 +24,10 @@ class HTTPRequestHandler {
         //GETかどうかを確認する
         if ("GET".equals(request.getRequestMethod())) {
 
-            //抽象パス=をつくる
-            File file;
-            String pathname;
-            //対応しているパターン
-            String requestURI = request.getRequestURI();
-            if (requestURI.endsWith("/")) {
-                pathname = "src/main/resources" + requestURI.replaceAll("/+", "/") + "index.html";
-            } else {
-                pathname = "src/main/resources" + requestURI;
-            }
-            file = new File(pathname);
+            File file = new File(request.getResourcePath());
 
             //リソースの有無を確認する
-            if (file.exists()) {
+            if (file.exists() && file.isFile()) {
                 System.out.println("リソースは存在しました。");
                 //入力ストリームとメモリへの出力ストリーム
                 InputStream inputStream = new FileInputStream(file);
