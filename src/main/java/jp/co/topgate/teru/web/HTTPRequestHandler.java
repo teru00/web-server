@@ -25,7 +25,6 @@ class HTTPRequestHandler {
         if ("GET".equals(request.getRequestMethod())) {
 
             //抽象パス=をつくる
-            //index.html固定なのがどうか
             File file;
             String pathname;
             //対応しているパターン
@@ -67,12 +66,14 @@ class HTTPRequestHandler {
                 response.setMessageBody(byteContent);
 
             } else {
+                System.out.println("リソースは存在しませんでした。");
                 response.setStatusLine("HTTP/1.1 404 Not Found");
                 response.setHeader("Content-Type", "text/html");
                 response.setMessageBody("404 Not Found".getBytes());
             }
 
         } else {
+            System.out.println("許可されていないHTTPメソッドです。");
             response.setStatusLine("HTTP/1.1 405 Method not allowed Explained");
             response.setHeader("Content-Type", "text/html");
             response.setMessageBody("HTTP 405 Error Method not allowed Explained".getBytes());

@@ -27,8 +27,7 @@ public class HTTPRequest {
      * @param inputStream ソケットから取得した入力ストリーム
      */
     public HTTPRequest(InputStream inputStream) {
-        //this.inputStream = inputStream;
-        //リクエストメッセージの読み込み
+        //コンストラクタでインスタンスメソッドを読んでよいのか
         this.init(inputStream);
     }
 
