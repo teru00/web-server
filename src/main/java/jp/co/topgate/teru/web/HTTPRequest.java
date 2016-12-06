@@ -92,7 +92,7 @@ public class HTTPRequest {
         if (requestURI.endsWith("/")) {
             resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/") + "index.html";
         } else {
-            resourcePath = "src/main/resources" + requestURI;
+            resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/");
         }
         return resourcePath;
     }
