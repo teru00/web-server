@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/teru00/web-server.svg?style=svg&circle-token=ec26b5296ac0f527a50f678d6deb510cd1f6cfb4)](https://circleci.com/gh/teru00/web-server)
 
 ## Overview
-Simple Web Server is the software for serving the files via HTTP.
+Simple Web Server is a software for serving the files via HTTP.
 
 ## Description
 This application can respond to the browser application.
@@ -11,7 +11,7 @@ and send static files of following the file type.
 text file
  - HTML
  - CSS
- - javascript
+ - JavaScript
 
 binary file
  - PNG
