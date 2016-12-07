@@ -50,7 +50,13 @@ public class HTTPRequestTest {
         for (int i = 0; i < requestMessage.length; i++) {
             InputStream inputStream = new ByteArrayInputStream(requestMessage[i].getBytes());
             HTTPRequest request = new HTTPRequest(inputStream);
-            String requestURI = request.getRequestURI();
+            String requestURI = null;
+            try {
+                requestURI = request.getRequestURI();
+            } catch (Exception e) {
+                System.err.println("ERROR: " + e);
+                e.getStackTrace();
+            }
             assertThat(expect[i], CoreMatchers.is(requestURI));
         }
     }
