@@ -1,9 +1,7 @@
 package jp.co.topgate.teru.web;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URLDecoder;
 
 /**
  *
@@ -67,13 +65,14 @@ public class HTTPRequest {
      * Webリソースの読み込みに必要なURIを返すインスタンスメソッド
      * @return
      */
-    public String getRequestURI() {
+    public String getRequestURI() throws Exception {
         String requestURI;
         if (requestLine[1].contains("?")) {
             requestURI = this.requestLine[1].substring(0, requestLine[1].indexOf("?"));
         } else {
             requestURI = this.requestLine[1];
         }
+        requestURI = URLDecoder.decode(requestURI, "UTF-8");
         return requestURI;
     }
 
@@ -83,7 +82,13 @@ public class HTTPRequest {
      */
     public String getResourcePath() {
         String resourcePath;
-        String requestURI = this.getRequestURI();
+        String requestURI = null;
+        try {
+            requestURI = this.getRequestURI();
+        } catch (Exception e) {
+            System.err.println("ERROR: " + e);
+            e.printStackTrace();
+        }
         if (requestURI.endsWith("/")) {
             resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/") + "index.html";
         } else {
