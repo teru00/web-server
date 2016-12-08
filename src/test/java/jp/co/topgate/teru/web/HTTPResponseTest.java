@@ -45,8 +45,8 @@ public class HTTPResponseTest {
     public void getResponseMessage() throws UnsupportedEncodingException {
 
         String responseMessage = "HTTP/1.1 200 OK\n"
-                + "Content Type: text/html\n"
-                + "\n"
+                + "Content Type: text/html\r\n"
+                + "\r\n"
                 + "<!DOCTYPE html\n>"
                 + "    <head>\n"
                 + "        <meta charset=\"UTF-8\" />\n"
