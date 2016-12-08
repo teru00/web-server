@@ -59,13 +59,14 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * @return ヘッダーフィールドのStringデータ
      */
     public String getHeadersField() {
+        final String CRLF = "\r\n";
         StringBuilder buff = new StringBuilder();
 
         for(String key: this.headersField.keySet()) {
             buff.append(key);
             buff.append(": ");
             buff.append(this.headersField.get(key));
-            buff.append("\n");
+            buff.append(CRLF);
         }
         return buff.toString();
     }
@@ -85,7 +86,7 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * @return responseMessage
      */
     public byte[] getResponseMessage() {
-        final String CRLF = "\n";
+        final String CRLF = "\r\n";
 
         byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
         byte[] responseMessage = new byte[responseHeader.length + this.messageBody.length];

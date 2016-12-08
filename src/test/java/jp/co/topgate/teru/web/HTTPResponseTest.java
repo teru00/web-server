@@ -15,8 +15,9 @@ public class HTTPResponseTest {
 
     @Test
     public void getHeadersField() {
+        final String CRLF = "\r\n";
         StringBuilder buff = new StringBuilder();
-        buff.append("Content-Type: text/html\n");
+        buff.append("Content-Type: text/html" + CRLF);
         HTTPResponse response = new HTTPResponse();
         response.setHeader("Content-Type", "text/html");
         assertThat(response.getHeadersField(), CoreMatchers.is(buff.toString()));
