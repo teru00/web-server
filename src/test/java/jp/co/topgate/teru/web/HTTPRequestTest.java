@@ -11,25 +11,47 @@ import static org.junit.Assert.assertThat;
 
 public class HTTPRequestTest {
 
+    /**
+     * 幾つかのパターンをテストするために用意したヘルパーメソッド
+     * h-はヘルパーという意味のprefix
+     *
+     * @param expect 期待値
+     * @param data テストデータ
+     */
+    private void hgetRequestMethod(String expect, String data) {
+        InputStream inputStream = new ByteArrayInputStream(data.getBytes());
+        HTTPRequest request = new HTTPRequest(inputStream);
+        String requestMethod = request.getRequestMethod();
+        assertThat(requestMethod, is(expect));
+    }
+
     @Test
     public void getRequestMethod() {
-        //テストデータ
-        String requestMessage1 = "GET / HTTP/1.1";
-        String requestMessage2 = "POST / HTTP/1.1";
-        String[] requestMessage = {requestMessage1, requestMessage2};
-        //期待値
-        String method1 = "GET";
-        String method2 = "POST";
-        String[] method = {method1, method2};
+        hgetRequestMethod("GET", "GET / HTTP/1.1");
+        hgetRequestMethod("POST", "POST / HTTP/1.1");
 
-
-        for (int i = 0; i < requestMessage.length; i++) {
-            InputStream inputStream = new ByteArrayInputStream(requestMessage[i].getBytes());
-            HTTPRequest request = new HTTPRequest(inputStream);
-            String requestMethod = request.getRequestMethod();
-            assertThat(requestMethod, is(method[i]));
-        }
     }
+
+
+
+//    @Test
+//    public void getRequestMethod() {
+//        // テストデータ
+//        String requestMessage1 = "GET / HTTP/1.1";
+//        String requestMessage2 = "POST / HTTP/1.1";
+//        String[] requestMessage = {requestMessage1, requestMessage2};
+//        // 期待値
+//        String method1 = "GET";
+//        String method2 = "POST";
+//        String[] method = {method1, method2};
+//
+//        for (int i = 0; i < requestMessage.length; i++) {
+//            InputStream inputStream = new ByteArrayInputStream(requestMessage[i].getBytes());
+//            HTTPRequest request = new HTTPRequest(inputStream);
+//            String requestMethod = request.getRequestMethod();
+//            assertThat(requestMethod, is(method[i]));
+//        }
+//    }
 
     @Test
     public void getRequestURI() {
