@@ -1,16 +1,14 @@
 package jp.co.topgate.teru.web;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-//テストクラス
 public class HTTPResponseTest {
 
     @Test
@@ -20,7 +18,7 @@ public class HTTPResponseTest {
         buff.append("Content-Type: text/html" + CRLF);
         HTTPResponse response = new HTTPResponse();
         response.setHeader("Content-Type", "text/html");
-        assertThat(response.getHeadersField(), CoreMatchers.is(buff.toString()));
+        assertThat(response.getHeadersField(), is(buff.toString()));
     }
 
     @Test
@@ -39,7 +37,7 @@ public class HTTPResponseTest {
 
         for (String key : testMap.keySet()) {
             String contentType = response.getContentType(key);
-            assertThat(contentType, CoreMatchers.is(testMap.get(key)));
+            assertThat(contentType, is(testMap.get(key)));
         }
     }
 
@@ -89,7 +87,7 @@ public class HTTPResponseTest {
                 + "</html>";
         response.setMessageBody(body.getBytes());
         String actual = new String(response.getResponseMessage(), "UTF-8");
-        assertThat(actual, CoreMatchers.is(responseMessage));
+        assertThat(actual, is(responseMessage));
 
     }
 }

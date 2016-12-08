@@ -15,7 +15,7 @@ public class HTTPThread extends Thread {
      *
      * クライアントソケット
      */
-    private Socket socket;
+    private final Socket socket;
 
     /**
      * コンストラクタ

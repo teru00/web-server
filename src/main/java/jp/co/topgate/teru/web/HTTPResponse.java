@@ -7,7 +7,7 @@ import java.util.Map;
  *
  *　クライアントに送信するHTTPレスポンスを生成するクラス。
  */
-public class HTTPResponse {
+class HTTPResponse {
 
     /**
      * レスポンスステタースラインを表す。
@@ -30,7 +30,7 @@ public class HTTPResponse {
      * ステータスラインのセッター
      * @param statusLine
      */
-    public void setStatusLine(String statusLine) {
+    void setStatusLine(String statusLine) {
         this.statusLine = statusLine;
     }
 
