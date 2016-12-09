@@ -52,7 +52,7 @@ public class HTTPThread extends Thread {
                 bo.close();
                 System.out.println("ソケットを解放しました。");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace();
         }

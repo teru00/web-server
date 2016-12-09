@@ -90,4 +90,17 @@ public class HTTPResponseTest {
         assertThat(actual, is(responseMessage));
 
     }
+
+    @Test
+    public void getStatusLine() {
+        getStatusLinceHelper("HTTP/1.1 200 Ok", "200");
+        getStatusLinceHelper("HTTP/1.1 404 not found", "404");
+        getStatusLinceHelper("HTTP/1.1 200 Ok", "405");
+    }
+    // getStatusLine()のテストメソッドのヘルパー
+    private void getStatusLinceHelper(String expected, String data) {
+        HTTPResponse response = new HTTPResponse();
+        response.setStatusLine(data);
+        assertThat(response.getStatusLine(), is(expected));
+    }
 }

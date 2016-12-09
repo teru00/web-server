@@ -28,10 +28,12 @@ class HTTPResponse {
 
     /**
      * ステータスラインのセッター
-     * @param statusLine
+     * @param statusCode ステータスコード
      */
-    void setStatusLine(String statusLine) {
-        this.statusLine = statusLine;
+    void setStatusLine(String statusCode) {
+        final String httpVersion = "HTTP/1.1";
+        String reasonPhrase = getReasonPhrase(statusCode);
+        this.statusLine = httpVersion + " " + statusCode + " " + reasonPhrase;
     }
 
     /**
@@ -75,7 +77,8 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      *
      * @param messageBody
      */
-    public void setMessageBody(byte[] messageBody) {
+    public <T> void setMessageBody(T messageBody) {
+        //if (messageBody.instanceof() != byte[])
         this.messageBody = messageBody;
     }
 
@@ -118,5 +121,21 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
         };
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
         return contentType.get(extension);
+    }
+    private String getReasonPhrase(String statusCode) {
+        Map<String, String> reasonPhrase = new HashMap<String, String>() {
+            {
+                put("200", "OK");
+                put("404", "Not Found");
+                put("405", "Method not allowed Explained");
+            }
+        };
+        return reasonPhrase.get(statusCode);
+    }
+    /**
+     * テスト用のメソッド
+     */
+    public String getStatusLine() {
+        return this.statusLine;
     }
 }

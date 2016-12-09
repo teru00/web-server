@@ -15,7 +15,6 @@ public class HTTPRequestTest {
     public void getRequestMethod() {
         getRequestMethodHelper("GET", "GET / HTTP/1.1");
         getRequestMethodHelper("POST", "POST / HTTP/1.1");
-
     }
 
     /**
