@@ -28,18 +28,21 @@ class HTTPRequestHandler {
             if (file.exists() && file.isFile()) {
                 System.out.println("リソースは存在しました。");
 
-                InputStream inputStream = new FileInputStream(file);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                InputStream inputStream = new FileInputStream(file);
+//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//
+//                int len;
+//                while ((len = inputStream.read()) != -1) {
+//                    byteArrayOutputStream.write(len);
+//                }
+//                if (byteArrayOutputStream != null) {
+//                    byteArrayOutputStream.flush();
+//                    byteArrayOutputStream.close();
+//                }
+//                byte[] byteContent = byteArrayOutputStream.toByteArray();
 
-                int len;
-                while ((len = inputStream.read()) != -1) {
-                    byteArrayOutputStream.write(len);
-                }
-                if (byteArrayOutputStream != null) {
-                    byteArrayOutputStream.flush();
-                    byteArrayOutputStream.close();
-                }
-                byte[] byteContent = byteArrayOutputStream.toByteArray();
+                // fileをロードするメソッド
+                byte [] byteContent = readFile(file);
 
                 inputStream.close();
                 response.setStatusLine("HTTP/1.1 200 OK");
@@ -60,5 +63,32 @@ class HTTPRequestHandler {
             response.setMessageBody("<h1>HTTP 405 Error Method not allowed Explained</h1>".getBytes());
         }
         return response;
+    }
+
+    private byte[] readFile(File file) {
+        // params File
+        // return
+        // filenameを引数にFS抽象パスを実体化したFileインスタンスを受け取る。
+        // それを使って、ファイルを読み込み、読み込んだファイルを次の振る舞いの入力のデータがとして渡せるようにする。
+        // ファイルの読み込みはバイナリとテキストに対応
+        // 巨大なファイルをロードする時を考える必要がある。
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            //
+            int len;
+            while ((len = inputStream.read()) != -1) {
+                byteArrayOutputStream.write(len);
+            }
+            if (byteArrayOutputStream != null) {
+                byteArrayOutputStream.flush();
+                byteArrayOutputStream.close();
+            }
+        } catch () {
+            // 例外が発生する原因
+            // ファイルが存在しない 上の時点で調べているのでない。
+            //
+        }
+
     }
 }
