@@ -22,7 +22,7 @@ public class HTTPRequestTest {
      * h-はヘルパーという意味のprefix
      *
      * @param expected 期待値
-     * @param data テストデータ
+     * @param data     テストデータ
      */
     private void getRequestMethodHelper(String expected, String data) {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
@@ -42,8 +42,9 @@ public class HTTPRequestTest {
 
     /**
      * getRequestURIのデータパターンをテストするヘルパーメソッド
-     * @param expected
-     * @param data
+     *
+     * @param expected 期待値
+     * @param data テストデータ
      */
     private void getRequestURIHelper(String expected, String data) {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
@@ -68,29 +69,10 @@ public class HTTPRequestTest {
         getResourcePathHelper("src/main/resources/sample/index.html", "GET /sample/////// HTTP/1.1");
         getResourcePathHelper("src/main/resources/sample/index.html", "GET /sample////////index.html HTTP/1.1");
     }
+
     private void getResourcePathHelper(String expected, String data) {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
         HTTPRequest request = new HTTPRequest(inputStream);
         assertThat(request.getResourcePath(), is(expected));
-    }
-
-    //init()のテスト
-    @Test
-    public void init() {
-        // data テストデータ
-        String requestMessage = "GET / HTTP/1.1\n" +
-                "Host: localhost:8080\n" +
-                "Connection: keep-alive\n" +
-                "Upgrade-Insecure-Requests: 1\n" +
-                "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36\n" +
-                "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n" +
-                "Accept-Encoding: gzip, deflate, sdch, br\n" +
-                "Accept-Language: ja,en-US;q=0.8,en;q=0.6\n";
-        // expected 期待値
-        String[] expected = {"GET", "/", "HTTP/1.1"};
-
-        InputStream inputStream = new ByteArrayInputStream(requestMessage.getBytes());
-        HTTPRequest request = new HTTPRequest(inputStream);
-        assertThat(request.getRequestLine(), is(expected));
     }
 }

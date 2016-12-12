@@ -1,7 +1,6 @@
 package jp.co.topgate.teru.web;
 
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
@@ -9,7 +8,7 @@ import java.net.Socket;
  *
  * サーバソケットで受信したクライアントと通信を行うためのスレッドクラス
  */
-public class HTTPThread extends Thread {
+class HTTPThread extends Thread {
 
     /**
      *
@@ -20,9 +19,9 @@ public class HTTPThread extends Thread {
     /**
      * コンストラクタ
      *
-     * @param socket
+     * @param socket クライアントソケット
      */
-    public HTTPThread(Socket socket) {
+    HTTPThread(Socket socket) {
         this.socket = socket;
     }
 

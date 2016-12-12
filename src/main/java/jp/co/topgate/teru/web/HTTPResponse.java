@@ -19,7 +19,7 @@ class HTTPResponse {
      * レスポンスヘッダーフィールドを表す。
      * e.g) Content Type: text/html
      */
-    private Map<String, String> headersField = new HashMap<String, String>();
+    private Map<String, String> headersField = new HashMap<>();
 
     /**
      * レスポンスボディを表す。
@@ -38,29 +38,29 @@ class HTTPResponse {
 
     /**
      * ヘッダーフィールドのセッター
-     * @param name
-     * @param value
+     * @param name ヘッダー名
+     * @param value 値
      */
-    public void setHeader(String name, String value) {
+    void setHeader(String name, String value) {
         //引数KVをMapのKVに設定する
         this.headersField.put(name, value);
     }
 
     /**
-a     * ヘッダーフィールドを追加するためのインスタンスメソッド
-     * @param name
-     * @param value
+     * ヘッダーフィールドを追加するためのインスタンスメソッド
+     * @param name ヘッダー名
+     * @param value 値
      */
-    public void addHeader(String name, String value) {
-        this.headersField.put(name, value);
-    }
+//    public void addHeader(String name, String value) {
+//        this.headersField.put(name, value);
+//    }
 
 
     /**
      * Mapで管理していたヘッダーフィールドの要素を書き出す
      * @return ヘッダーフィールドのStringデータ
      */
-    public String getHeadersField() {
+    String getHeadersField() {
         final String CRLF = "\r\n";
         StringBuilder buff = new StringBuilder();
 
@@ -75,10 +75,9 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
 
     /**
      *
-     * @param messageBody
+     * @param messageBody レスポンスボディ
      */
-    public <T> void setMessageBody(T messageBody) {
-        //if (messageBody.instanceof() != byte[])
+    void setMessageBody(byte[] messageBody) {
         this.messageBody = messageBody;
     }
 
@@ -88,7 +87,7 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * クライアントに送信するレスポンスメッセージを組み立てるインスタンスメソッド。
      * @return responseMessage
      */
-    public byte[] getResponseMessage() {
+    byte[] getResponseMessage() {
         final String CRLF = "\r\n";
 
         byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
@@ -107,8 +106,8 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
      * @param filename Content Typeを決定するために必要なリソースファイル名
      * @return なし
      */
-    public String getContentType(String filename) {
-        Map<String, String> contentType = new HashMap<String, String>() {
+    String getContentType(String filename) {
+        Map<String, String> contentTypeMap = new HashMap<String, String>() {
             {
                 put("html", "text/html");
                 put("css", "text/css");
@@ -120,7 +119,13 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
             }
         };
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
-        return contentType.get(extension);
+        String contentType;
+        if (contentTypeMap.get(extension) != null) {
+            contentType = contentTypeMap.get(extension);
+        } else {
+            contentType = "application/octet-stream";
+        }
+        return contentType;
     }
     private String getReasonPhrase(String statusCode) {
         Map<String, String> reasonPhrase = new HashMap<String, String>() {
@@ -135,7 +140,7 @@ a     * ヘッダーフィールドを追加するためのインスタンスメ
     /**
      * テスト用のメソッド
      */
-    public String getStatusLine() {
+    String getStatusLine() {
         return this.statusLine;
     }
 }

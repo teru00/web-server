@@ -19,9 +19,9 @@ class HTTPRequestHandler {
      *
      * @param request HTTPRequestオブジェクト
      * @return response HTTPResponseオブジェクト
-     * @throws IOException
+     * @throws IOException 入出力の例外
      */
-    public HTTPResponse handle(HTTPRequest request) throws Exception {
+    HTTPResponse handle(HTTPRequest request) throws Exception {
 
         HTTPResponse response = new HTTPResponse();
 
@@ -56,15 +56,8 @@ class HTTPRequestHandler {
     }
 
     private byte[] readFile(File file) throws Exception {
-        // params File
-        // return
-        // filenameを引数にFS抽象パスを実体化したFileインスタンスを受け取る。
-        // それを使って、ファイルを読み込み、読み込んだファイルを次の振る舞いの入力のデータがとして渡せるようにする。
-        // ファイルの読み込みはバイナリとテキストに対応
-        // 巨大なファイルをロードする時を考える必要がある。
         InputStream inputStream = new FileInputStream(file);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        //
         int len;
         while ((len = inputStream.read()) != -1) {
             byteArrayOutputStream.write(len);

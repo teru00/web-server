@@ -66,7 +66,7 @@ public class HTTPResponseTest {
                 + "</html>";
 
         HTTPResponse response = new HTTPResponse();
-        response.setStatusLine("HTTP/1.1 200 OK");
+        response.setStatusLine("200");
         response.setHeader("Content Type", "text/html");
         String body = "<!DOCTYPE html\n>"
                 + "    <head>\n"
@@ -93,12 +93,12 @@ public class HTTPResponseTest {
 
     @Test
     public void getStatusLine() {
-        getStatusLinceHelper("HTTP/1.1 200 Ok", "200");
-        getStatusLinceHelper("HTTP/1.1 404 not found", "404");
-        getStatusLinceHelper("HTTP/1.1 200 Ok", "405");
+        getStatusLineHelper("HTTP/1.1 200 OK", "200");
+        getStatusLineHelper("HTTP/1.1 404 Not Found", "404");
+        getStatusLineHelper("HTTP/1.1 405 Method not allowed Explained", "405");
     }
     // getStatusLine()のテストメソッドのヘルパー
-    private void getStatusLinceHelper(String expected, String data) {
+    private void getStatusLineHelper(String expected, String data) {
         HTTPResponse response = new HTTPResponse();
         response.setStatusLine(data);
         assertThat(response.getStatusLine(), is(expected));
