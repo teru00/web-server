@@ -4,6 +4,7 @@ out/
 .gradle/
 build/
 settings.gradle
+4G.file
 
 ### https://raw.github.com/github/gitignore/a0df192f5271ad4d35a36c163d768e2db656b9fe/Global/macOS.gitignore
 
@@ -84,3 +85,4 @@ flycheck_*.el
 .dir-locals.el
 
 
+src/main/resources/4G.file

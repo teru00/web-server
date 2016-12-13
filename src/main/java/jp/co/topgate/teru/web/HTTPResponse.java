@@ -51,9 +51,13 @@ class HTTPResponse {
      * @param name ヘッダー名
      * @param value 値
      */
-//    public void addHeader(String name, String value) {
-//        this.headersField.put(name, value);
-//    }
+    public void addHeader(String name, String value) {
+        if (this.headersField.containsKey(name)) {
+            throw new RuntimeException("the mapping already exists");
+        } else {
+            this.headersField.put(name, value);
+        }
+    }
 
 
     /**

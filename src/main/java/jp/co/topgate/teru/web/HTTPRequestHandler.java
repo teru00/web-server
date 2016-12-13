@@ -55,7 +55,7 @@ class HTTPRequestHandler {
         return response;
     }
 
-    private byte[] readFile(File file) throws Exception {
+    byte[] readFile(File file) throws Exception {
         InputStream inputStream = new FileInputStream(file);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int len;
