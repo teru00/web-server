@@ -1,6 +1,5 @@
 package jp.co.topgate.teru.web;
 
-import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.net.Socket;
 
@@ -26,7 +25,7 @@ class HTTPThread extends Thread {
     }
 
     /**
-     *
+     * スレッドを起動する
      *
      */
     public void run() {
@@ -39,18 +38,8 @@ class HTTPThread extends Thread {
 
             HTTPResponse response = handler.handle(request);
 
-            BufferedOutputStream bo = new BufferedOutputStream(socket.getOutputStream());
+            response.respond(socket.getOutputStream());
 
-            byte[] responseMessage = response.getResponseMessage();
-            System.out.println("レスポンスメッセージを取得しました。");
-
-            if (responseMessage != null) {
-                bo.write(responseMessage, 0, responseMessage.length);
-                bo.flush();
-                System.out.println("レスポンスメッセージを送信しました。");
-                bo.close();
-                System.out.println("ソケットを解放しました。");
-            }
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
             e.printStackTrace();

@@ -18,8 +18,6 @@ class HTTPRequest {
      * @param inputStream ソケットから取得した入力ストリーム
      */
      HTTPRequest(InputStream inputStream) {
-        // コンストラクタでインスタンスメソッドを読んでよいのか
-        // コンストラクタの中でインスタンスメソッドを呼ぶのは避けたい
         this.init(inputStream);
     }
 

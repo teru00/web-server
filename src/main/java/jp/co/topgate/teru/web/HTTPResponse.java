@@ -1,5 +1,11 @@
 package jp.co.topgate.teru.web;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +28,14 @@ class HTTPResponse {
     private Map<String, String> headersField = new HashMap<>();
 
     /**
-     * レスポンスボディを表す。
+     * エラーコンテンツを保持するレスポンスボディ
      */
-    private byte[] messageBody;
+    private String messageBodyError;
+
+    /**
+     * クライアントに送信する静的ファイルへのファイルパスを保持するレスポンスボディ
+     */
+    private File messageBodyFile;
 
     /**
      * ステータスラインのセッター
@@ -42,7 +53,6 @@ class HTTPResponse {
      * @param value 値
      */
     void setHeader(String name, String value) {
-        //引数KVをMapのKVに設定する
         this.headersField.put(name, value);
     }
 
@@ -77,30 +87,24 @@ class HTTPResponse {
         return buff.toString();
     }
 
+
+
     /**
+     * エラーコンテンツを保持するフィールド
      *
-     * @param messageBody レスポンスボディ
+     * @param messageBodyError エラーコンテンツ
      */
-    void setMessageBody(byte[] messageBody) {
-        this.messageBody = messageBody;
+    void setMessageBodyError(String messageBodyError) {
+        this.messageBodyError = messageBodyError;
     }
 
-
-
     /**
-     * クライアントに送信するレスポンスメッセージを組み立てるインスタンスメソッド。
-     * @return responseMessage
+     * クライアントに送信するリソースを保持するフィールド
+     *
+     * @param file 静的ファイル
      */
-    byte[] getResponseMessage() {
-        final String CRLF = "\r\n";
-
-        byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
-        byte[] responseMessage = new byte[responseHeader.length + this.messageBody.length];
-
-        System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
-        System.arraycopy(this.messageBody, 0, responseMessage, responseHeader.length, this.messageBody.length);
-
-        return responseMessage;
+    void setMessageBodyFile(File file) {
+        this.messageBodyFile = file;
     }
 
     /**
@@ -119,7 +123,6 @@ class HTTPResponse {
                 put("png", "image/png");
                 put("gif", "image/gif");
                 put("js", "application/javascript");
-                //後幾つかあるよ。
             }
         };
         String extension = filename.substring(filename.lastIndexOf(".") + 1);
@@ -147,4 +150,41 @@ class HTTPResponse {
     String getStatusLine() {
         return this.statusLine;
     }
+
+    /**
+     * HTTPレスポンスをクライアントに送信する処理
+     *
+     * @param outputStream 出力先ストリーム
+     * @throws IOException IO系の例外
+     */
+    public void respond(OutputStream outputStream) throws IOException {
+        final String CRLF = "\r\n";
+
+        if (this.messageBodyFile != null) {
+            // Filedatasource紐付け
+            DataSource dataSource = new FileDataSource(this.messageBodyFile);
+            // datahandlerを生成
+            DataHandler dataHandler = new DataHandler(dataSource);
+            //レスポンスヘッダーをarraycopyでマージする
+            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            // 先にレスポンスヘッダーを送信する
+            outputStream.write(responseHeader, 0, responseHeader.length);
+            // そのあとでレスポンスボディーがもっているfileクラスを使ってデータを送信する。
+            dataHandler.writeTo(outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } else {
+            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            byte[] responseBody = this.messageBodyError.getBytes();
+            byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
+
+            System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
+            System.arraycopy(responseBody, 0, responseMessage, responseHeader.length, responseBody.length);
+
+            outputStream.write(responseMessage, 0, responseMessage.length);
+            outputStream.flush();
+            outputStream.close();
+        }
+    }
+
 }

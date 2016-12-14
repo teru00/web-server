@@ -14,28 +14,10 @@ import static org.junit.Assert.assertThat;
  */
 public class HTTPRequestHandlerTest {
     @Test
-    public void readFile() {
-        readFileHelper("テスト\n", "src/test/resources/test.html");
-        readFileHelper("テスト\n", "src/test/resources/.sample/test.html");
-        readFileHelper("テスト\n", "src/test/resources/sample/test.html");
+    public void errorHandle() {
+        errorHandleHelper("1", "1");
     }
-    private void readFileHelper(String expeceted, String path) {
-        // ファイルの中身を読み込むことができているかを確認する
-        // Fileを作る
-        HTTPRequestHandler httpRequestHandler = new HTTPRequestHandler();
-        File file = new File(path);
-        byte[] byteContent = new byte[0];
-        try {
-            byteContent = httpRequestHandler.readFile(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String strContent = null;
-        try {
-            strContent = new String(byteContent, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        assertThat(strContent, CoreMatchers.is(expeceted));
+    private void errorHandleHelper(String expeceted, String result) {
+        assertThat(result, CoreMatchers.is(expeceted));
     }
 }
