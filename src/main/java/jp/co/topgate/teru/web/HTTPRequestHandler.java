@@ -33,7 +33,7 @@ class HTTPRequestHandler {
 
                 response.setStatusLine("200");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
-                response.setMessageBodyFile(file);
+                response.setMessageBody(file);
 
             } else {
                 System.out.println("リソースは存在しませんでした。");
@@ -52,7 +52,7 @@ class HTTPRequestHandler {
     }
 
     /**
-     * エラーコンテンツを文字列で返すメソッド
+     * エラーコンテンツを文字列で返すハンドラメソッド
      *
      * @param errorStatus エラーステータスコード
      * @return エラーコンテンツ

@@ -35,7 +35,7 @@ class HTTPResponse {
     /**
      * クライアントに送信する静的ファイルへのファイルパスを保持するレスポンスボディ
      */
-    private File messageBodyFile;
+    private File messageBody;
 
     /**
      * ステータスラインのセッター
@@ -103,8 +103,8 @@ class HTTPResponse {
      *
      * @param file 静的ファイル
      */
-    void setMessageBodyFile(File file) {
-        this.messageBodyFile = file;
+    void setMessageBody(File file) {
+        this.messageBody = file;
     }
 
     /**
@@ -160,16 +160,11 @@ class HTTPResponse {
     public void respond(OutputStream outputStream) throws IOException {
         final String CRLF = "\r\n";
 
-        if (this.messageBodyFile != null) {
-            // Filedatasource紐付け
-            DataSource dataSource = new FileDataSource(this.messageBodyFile);
-            // datahandlerを生成
+        if (this.messageBody != null) {
+            DataSource dataSource = new FileDataSource(this.messageBody);
             DataHandler dataHandler = new DataHandler(dataSource);
-            //レスポンスヘッダーをarraycopyでマージする
             byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
-            // 先にレスポンスヘッダーを送信する
             outputStream.write(responseHeader, 0, responseHeader.length);
-            // そのあとでレスポンスボディーがもっているfileクラスを使ってデータを送信する。
             dataHandler.writeTo(outputStream);
             outputStream.flush();
             outputStream.close();
@@ -177,10 +172,8 @@ class HTTPResponse {
             byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             byte[] responseBody = this.messageBodyError.getBytes();
             byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
-
             System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
             System.arraycopy(responseBody, 0, responseMessage, responseHeader.length, responseBody.length);
-
             outputStream.write(responseMessage, 0, responseMessage.length);
             outputStream.flush();
             outputStream.close();

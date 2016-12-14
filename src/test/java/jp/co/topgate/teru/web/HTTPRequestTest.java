@@ -33,7 +33,6 @@ public class HTTPRequestTest {
 
     @Test
     public void getRequestURI() {
-        //テストデータ
         getRequestURIHelper("/", "GET / HTTP/1.1");
         getRequestURIHelper("/index.html", "GET /index.html HTTP/1.1");
         getRequestURIHelper("/sample/index.html", "GET /sample/index.html HTTP/1.1");

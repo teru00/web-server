@@ -1,8 +1,6 @@
 package jp.co.topgate.teru.web;
 
 import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,62 +40,12 @@ public class HTTPResponseTest {
     }
 
     @Test
-    public void getResponseMessage() throws UnsupportedEncodingException {
-
-        String responseMessage = "HTTP/1.1 200 OK\n"
-                + "Content Type: text/html\r\n"
-                + "\r\n"
-                + "<!DOCTYPE html\n>"
-                + "    <head>\n"
-                + "        <meta charset=\"UTF-8\" />\n"
-                + "        <title>Simple HTTP Server</title>\n"
-                + "        <link rel=\"stylesheet\" href=\"style.css\">\n"
-                + "    </head>\n"
-                + "    <body>\n"
-                + "        <h1>Hello Simple HTTP Server</h1>\n"
-                + "        <img src=\"donaldTrump.png\">\n"
-                + "        <script src=\"myscript.js\"></script>\n"
-                + "        <ul>\n"
-                + "            <li><a href=\"hc.jpeg\">JPEG</a></li>\n"
-                + "            <li><a href=\"dl.gif\">GIF</a></li>\n"
-                + "            <li><a href=\"donaldTrump.png\">PNG</a></li>\n"
-                + "        </ul>\n"
-                + "    </body>\n"
-                + "</html>";
-
-        HTTPResponse response = new HTTPResponse();
-        response.setStatusLine("200");
-        response.setHeader("Content Type", "text/html");
-        String body = "<!DOCTYPE html\n>"
-                + "    <head>\n"
-                + "        <meta charset=\"UTF-8\" />\n"
-                + "        <title>Simple HTTP Server</title>\n"
-                + "        <link rel=\"stylesheet\" href=\"style.css\">\n"
-                + "    </head>\n"
-                + "    <body>\n"
-                + "        <h1>Hello Simple HTTP Server</h1>\n"
-                + "        <img src=\"donaldTrump.png\">\n"
-                + "        <script src=\"myscript.js\"></script>\n"
-                + "        <ul>\n"
-                + "            <li><a href=\"hc.jpeg\">JPEG</a></li>\n"
-                + "            <li><a href=\"dl.gif\">GIF</a></li>\n"
-                + "            <li><a href=\"donaldTrump.png\">PNG</a></li>\n"
-                + "        </ul>\n"
-                + "    </body>\n"
-                + "</html>";
-        response.setMessageBody(body.getBytes());
-        String actual = new String(response.getResponseMessage(), "UTF-8");
-        assertThat(actual, is(responseMessage));
-
-    }
-
-    @Test
     public void getStatusLine() {
         getStatusLineHelper("HTTP/1.1 200 OK", "200");
         getStatusLineHelper("HTTP/1.1 404 Not Found", "404");
         getStatusLineHelper("HTTP/1.1 405 Method not allowed Explained", "405");
     }
-    // getStatusLine()のテストメソッドのヘルパー
+
     private void getStatusLineHelper(String expected, String data) {
         HTTPResponse response = new HTTPResponse();
         response.setStatusLine(data);
