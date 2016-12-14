@@ -8,33 +8,31 @@ import java.net.URLDecoder;
  * クライアントから取得したHTTPリクエストの状態や
  * レスポンスを送信するための振る舞いを持つクラス。
  */
-public class HTTPRequest {
-
-    /**
-     * HTTPリクエストの1行目
-     * 最低限のWebサーバはこのリクエストラインを解析できればよい。
-     */
-    private String[] requestLine;
+class HTTPRequest {
+    
+    private String requestMethod;
+    private String url;
 
     /**
      * inputStreamを使ってHTTPRequestオブジェクトに初期値を設定する。
      * @param inputStream ソケットから取得した入力ストリーム
      */
-    public HTTPRequest(InputStream inputStream) {
-        //コンストラクタでインスタンスメソッドを読んでよいのか
+     HTTPRequest(InputStream inputStream) {
         this.init(inputStream);
     }
 
     /**
      * HTTPRequestオブジェクトの初期値を設定するインスタンスメソッド。
-     * @param inputStream
+     * @param inputStream 入力ストリーム
      */
-    public void init(InputStream inputStream) {
+     private void init(InputStream inputStream) {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         System.out.println("今から入力ストリーム経由でデータを取得します");
         try {
             String line = br.readLine();
-            this.requestLine = line.split(" ");
+            String[] requestLine = line.split(" ");
+            this.requestMethod = requestLine[0];
+            this.url = requestLine[1];
 
             System.out.println("リクエストメッセージ===========");
             System.out.println(line);
@@ -54,23 +52,23 @@ public class HTTPRequest {
      *
      * リクエストメソッドのゲッター
      * 現時点ではGETかその他の判定をする
-     * @return
+     * @return requestMethod
      */
-    public String getRequestMethod() {
-        return this.requestLine[0];
+    String getRequestMethod() {
+        return this.requestMethod;
     }
 
     /**
      * リクエストURIのゲッター
      * Webリソースの読み込みに必要なURIを返すインスタンスメソッド
-     * @return
+     * @return requestURI
      */
-    public String getRequestURI() throws Exception {
+    String getRequestURI() throws Exception {
         String requestURI;
-        if (requestLine[1].contains("?")) {
-            requestURI = this.requestLine[1].substring(0, requestLine[1].indexOf("?"));
+        if (this.url.contains("?")) {
+            requestURI = this.url.substring(0, this.url.indexOf("?"));
         } else {
-            requestURI = this.requestLine[1];
+            requestURI = this.url;
         }
         requestURI = URLDecoder.decode(requestURI, "UTF-8");
         return requestURI;
@@ -80,9 +78,10 @@ public class HTTPRequest {
      * リクエストURIを分析してリソースまでの適切なパス名を返す
      * @return resourcePath
      */
-    public String getResourcePath() {
+    String getResourcePath() {
         String resourcePath;
         String requestURI = null;
+        // ここのtry-catchがわからん。
         try {
             requestURI = this.getRequestURI();
         } catch (Exception e) {
@@ -95,12 +94,5 @@ public class HTTPRequest {
             resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/");
         }
         return resourcePath;
-    }
-
-    /**
-     * テスト用メソッド
-     */
-    public String[] getRequestLine() {
-        return this.requestLine;
     }
 }

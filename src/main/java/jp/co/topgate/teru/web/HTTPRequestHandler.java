@@ -1,6 +1,9 @@
 package jp.co.topgate.teru.web;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,9 +18,9 @@ class HTTPRequestHandler {
      *
      * @param request HTTPRequestオブジェクト
      * @return response HTTPResponseオブジェクト
-     * @throws IOException
+     * @throws IOException 入出力の例外
      */
-    public HTTPResponse handle(HTTPRequest request) throws IOException {
+    HTTPResponse handle(HTTPRequest request) throws Exception {
 
         HTTPResponse response = new HTTPResponse();
 
@@ -28,37 +31,51 @@ class HTTPRequestHandler {
             if (file.exists() && file.isFile()) {
                 System.out.println("リソースは存在しました。");
 
-                InputStream inputStream = new FileInputStream(file);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-                int len;
-                while ((len = inputStream.read()) != -1) {
-                    byteArrayOutputStream.write(len);
-                }
-                if (byteArrayOutputStream != null) {
-                    byteArrayOutputStream.flush();
-                    byteArrayOutputStream.close();
-                }
-                byte[] byteContent = byteArrayOutputStream.toByteArray();
-
-                inputStream.close();
-                response.setStatusLine("HTTP/1.1 200 OK");
+                response.setStatusLine("200");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
-                response.setMessageBody(byteContent);
+                response.setMessageBody(file);
 
             } else {
                 System.out.println("リソースは存在しませんでした。");
-                response.setStatusLine("HTTP/1.1 404 Not Found");
+                response.setStatusLine("404");
                 response.setHeader("Content-Type", "text/html");
-                response.setMessageBody("<h1>404 Not Found</h1>".getBytes());
+                response.setMessageBodyError(errorHandle("404"));
             }
 
         } else {
             System.out.println("許可されていないHTTPメソッドです。");
-            response.setStatusLine("HTTP/1.1 405 Method not allowed Explained");
+            response.setStatusLine("405");
             response.setHeader("Content-Type", "text/html");
-            response.setMessageBody("<h1>HTTP 405 Error Method not allowed Explained</h1>".getBytes());
+            response.setMessageBodyError(errorHandle("405"));
         }
         return response;
+    }
+
+    /**
+     * エラーコンテンツを文字列で返すハンドラメソッド
+     *
+     * @param errorStatus エラーステータスコード
+     * @return エラーコンテンツ
+     */
+    String errorHandle(String errorStatus) {
+        Map<String, String> errorMessage = new HashMap<String, String>() {
+            {
+                put("404", "Not Found");
+                put("405", "Method not allowed Explained");
+            }
+        };
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>\n");
+        stringBuilder.append("<html>\n");
+        stringBuilder.append("    <head>\n");
+        stringBuilder.append("        <meta charset=\"UTF-8\" />\n");
+        stringBuilder.append("        <title>Simple HTTP Server</title>\n");
+        stringBuilder.append("    <body>\n");
+        stringBuilder.append("        <h1>" + errorStatus + " " + errorMessage.get(errorStatus) + "</h1>\n");
+        stringBuilder.append("    </body>\n");
+        stringBuilder.append("</html>");
+
+        String errorContent = new String(stringBuilder);
+        return errorContent;
     }
 }

@@ -1,25 +1,22 @@
 package jp.co.topgate.teru.web;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-//テストクラス
 public class HTTPResponseTest {
 
     @Test
     public void getHeadersField() {
+        final String CRLF = "\r\n";
         StringBuilder buff = new StringBuilder();
-        buff.append("Content-Type: text/html\n");
+        buff.append("Content-Type: text/html" + CRLF);
         HTTPResponse response = new HTTPResponse();
         response.setHeader("Content-Type", "text/html");
-        assertThat(response.getHeadersField(), CoreMatchers.is(buff.toString()));
+        assertThat(response.getHeadersField(), is(buff.toString()));
     }
 
     @Test
@@ -38,57 +35,20 @@ public class HTTPResponseTest {
 
         for (String key : testMap.keySet()) {
             String contentType = response.getContentType(key);
-            assertThat(contentType, CoreMatchers.is(testMap.get(key)));
+            assertThat(contentType, is(testMap.get(key)));
         }
     }
 
     @Test
-    public void getResponseMessage() throws UnsupportedEncodingException {
+    public void getStatusLine() {
+        getStatusLineHelper("HTTP/1.1 200 OK", "200");
+        getStatusLineHelper("HTTP/1.1 404 Not Found", "404");
+        getStatusLineHelper("HTTP/1.1 405 Method not allowed Explained", "405");
+    }
 
-        String responseMessage = "HTTP/1.1 200 OK\n"
-                + "Content Type: text/html\n"
-                + "\n"
-                + "<!DOCTYPE html\n>"
-                + "    <head>\n"
-                + "        <meta charset=\"UTF-8\" />\n"
-                + "        <title>Simple HTTP Server</title>\n"
-                + "        <link rel=\"stylesheet\" href=\"style.css\">\n"
-                + "    </head>\n"
-                + "    <body>\n"
-                + "        <h1>Hello Simple HTTP Server</h1>\n"
-                + "        <img src=\"donaldTrump.png\">\n"
-                + "        <script src=\"myscript.js\"></script>\n"
-                + "        <ul>\n"
-                + "            <li><a href=\"hc.jpeg\">JPEG</a></li>\n"
-                + "            <li><a href=\"dl.gif\">GIF</a></li>\n"
-                + "            <li><a href=\"donaldTrump.png\">PNG</a></li>\n"
-                + "        </ul>\n"
-                + "    </body>\n"
-                + "</html>";
-
+    private void getStatusLineHelper(String expected, String data) {
         HTTPResponse response = new HTTPResponse();
-        response.setStatusLine("HTTP/1.1 200 OK");
-        response.setHeader("Content Type", "text/html");
-        String body = "<!DOCTYPE html\n>"
-                + "    <head>\n"
-                + "        <meta charset=\"UTF-8\" />\n"
-                + "        <title>Simple HTTP Server</title>\n"
-                + "        <link rel=\"stylesheet\" href=\"style.css\">\n"
-                + "    </head>\n"
-                + "    <body>\n"
-                + "        <h1>Hello Simple HTTP Server</h1>\n"
-                + "        <img src=\"donaldTrump.png\">\n"
-                + "        <script src=\"myscript.js\"></script>\n"
-                + "        <ul>\n"
-                + "            <li><a href=\"hc.jpeg\">JPEG</a></li>\n"
-                + "            <li><a href=\"dl.gif\">GIF</a></li>\n"
-                + "            <li><a href=\"donaldTrump.png\">PNG</a></li>\n"
-                + "        </ul>\n"
-                + "    </body>\n"
-                + "</html>";
-        response.setMessageBody(body.getBytes());
-        String actual = new String(response.getResponseMessage(), "UTF-8");
-        assertThat(actual, CoreMatchers.is(responseMessage));
-
+        response.setStatusLine(data);
+        assertThat(response.getStatusLine(), is(expected));
     }
 }
