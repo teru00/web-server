@@ -21,6 +21,35 @@ class HTTPResponse {
      */
     private String statusLine;
 
+    private String statusCode;
+    // setter
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    private String reasonPhrase;
+    // setter
+    public void setReasonPhrase(String reasonPhrase) {
+        this.reasonPhrase = reasonPhrase;
+    }
+
+
+    // handleの中でsetされている
+    // statusCodeなど新しい状態を持たせるやり方
+    // メソッドを新しく定義するやり方
+    // statusCodeとreasonPhraseとVersionさえあれば事足りる
+    // 一番簡単なy利方としては、新しい状態を持たせること
+    // 何れにしても状態を持たせないといけないのでは、handle内での
+    // 状態とmainでの状態は時間的な流れがあり、状態遷移が起きる
+    // オブジェクトに値を保持してもらわないと困るのだ。それかrespondに
+    // 状態を持たせるやり方がある。handleの中でやっているのは、状態の決定
+    // requestの状態をパースすることで、responseの状態を決定している。
+    // mainの中でやっているのはある状態をもったresponseオブジェクトに
+    // 送信命令をすること。
+    // 送信命令を受けた、responseはみづからが保持する状態を使って
+    // レスポンス全体を構成する。
+    // レスポンスに新しく状態を持たせるとしたら、
+
     /**
      * レスポンスヘッダーフィールドを表す。
      * e.g) Content Type: text/html
@@ -36,16 +65,6 @@ class HTTPResponse {
      * クライアントに送信する静的ファイルへのファイルパスを保持するレスポンスボディ
      */
     private File messageBody;
-
-    /**
-     * ステータスラインのセッター
-     * @param statusCode ステータスコード
-     */
-    void setStatusLine(String statusCode) {
-        final String httpVersion = "HTTP/1.1";
-        String reasonPhrase = getReasonPhrase(statusCode);
-        this.statusLine = httpVersion + " " + statusCode + " " + reasonPhrase;
-    }
 
     /**
      * ヘッダーフィールドのセッター
@@ -134,16 +153,7 @@ class HTTPResponse {
         }
         return contentType;
     }
-    private String getReasonPhrase(String statusCode) {
-        Map<String, String> reasonPhrase = new HashMap<String, String>() {
-            {
-                put("200", "OK");
-                put("404", "Not Found");
-                put("405", "Method not allowed Explained");
-            }
-        };
-        return reasonPhrase.get(statusCode);
-    }
+
     /**
      * テスト用のメソッド
      */
@@ -159,17 +169,19 @@ class HTTPResponse {
      */
     public void respond(OutputStream outputStream) throws IOException {
         final String CRLF = "\r\n";
+        final String httpVersion = "HTTP/1.1";
+        String statusLine = httpVersion + " " + this.statusCode +  " " + this.reasonPhrase;
 
         if (this.messageBody != null) {
             DataSource dataSource = new FileDataSource(this.messageBody);
             DataHandler dataHandler = new DataHandler(dataSource);
-            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             outputStream.write(responseHeader, 0, responseHeader.length);
             dataHandler.writeTo(outputStream);
             outputStream.flush();
             outputStream.close();
         } else {
-            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             byte[] responseBody = this.messageBodyError.getBytes();
             byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
             System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);

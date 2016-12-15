@@ -38,17 +38,4 @@ public class HTTPResponseTest {
             assertThat(contentType, is(testMap.get(key)));
         }
     }
-
-    @Test
-    public void getStatusLine() {
-        getStatusLineHelper("HTTP/1.1 200 OK", "200");
-        getStatusLineHelper("HTTP/1.1 404 Not Found", "404");
-        getStatusLineHelper("HTTP/1.1 405 Method not allowed Explained", "405");
-    }
-
-    private void getStatusLineHelper(String expected, String data) {
-        HTTPResponse response = new HTTPResponse();
-        response.setStatusLine(data);
-        assertThat(response.getStatusLine(), is(expected));
-    }
 }
