@@ -38,6 +38,15 @@ class HTTPThread extends Thread {
 
             HTTPResponse response = handler.handle(request);
 
+            // メソッドごとにハンドラ処理を対応させる
+            // クライアントとTCP通信のやり取りを行うHTTPThreadにリクエストメソッドの振り分けをさせている。
+            // リクエストメソッドの振り分けはどこでやるべきなのか？
+            // リクエストメソッドの主な種類は4つ。get post delete put 任意（ファストリーなどは任意なものを使っている）
+            // getはwebリソースの要求
+            // postはフォームからデータを送信する。データはリクエストとして送信されてくるのだが、
+            // データを保持する場所はリクエストURIのリクエストパラメータになる。
+
+
             response.respond(socket.getOutputStream());
 
         } catch (Exception e) {

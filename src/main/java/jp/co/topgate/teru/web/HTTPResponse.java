@@ -21,9 +21,9 @@ class HTTPResponse {
      */
     private String statusLine;
 
-    private String statusCode;
+    private int statusCode;
     // setter
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -170,7 +170,8 @@ class HTTPResponse {
     public void respond(OutputStream outputStream) throws IOException {
         final String CRLF = "\r\n";
         final String httpVersion = "HTTP/1.1";
-        String statusLine = httpVersion + " " + this.statusCode +  " " + this.reasonPhrase;
+        String statusCodeString = String.valueOf(this.statusCode);
+        String statusLine = httpVersion + " " + statusCodeString +  " " + this.reasonPhrase;
 
         if (this.messageBody != null) {
             DataSource dataSource = new FileDataSource(this.messageBody);

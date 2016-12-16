@@ -31,14 +31,14 @@ class HTTPRequestHandler {
             if (file.exists() && file.isFile()) {
                 System.out.println("リソースは存在しました。");
 
-                response.setStatusCode("200");
+                response.setStatusCode(200);
                 response.setReasonPhrase("OK");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
                 response.setMessageBody(file);
 
             } else {
                 System.out.println("リソースは存在しませんでした。");
-                response.setStatusCode("404");
+                response.setStatusCode(404);
                 response.setReasonPhrase("Not Found");
                 response.setHeader("Content-Type", "text/html");
                 response.setMessageBodyError(errorHandle("404"));
@@ -46,7 +46,7 @@ class HTTPRequestHandler {
 
         } else {
             System.out.println("許可されていないHTTPメソッドです。");
-            response.setStatusCode("405");
+            response.setStatusCode(405);
             response.setReasonPhrase("Method not allowed Explained");
             response.setHeader("Content-Type", "text/html");
             response.setMessageBodyError(errorHandle("405"));
