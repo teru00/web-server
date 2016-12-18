@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-// 役割は、リクエストが指定するURIを解析してファイルをロードしてレスポンスを組み立てる
+// 静的ファイルサーバ
 
 /**
  * Created by terufumishimoji on 2016/12/16.

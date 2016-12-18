@@ -1,9 +1,6 @@
 package jp.co.topgate.teru.web;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -35,14 +32,14 @@ class HTTPRequestHandler {
 
         HTTPResponse response = new HTTPResponse();
 
-        if (request.getRequestMethod() == "program") {
+        if (request.getRequestURI().equals("/program/board")) {
             // 動的アプリケーション
             DynamicContentHandler dynamicContentHandler = new DynamicContentHandler();
             // GET/POST
-            if (request.getRequestMethod() == "GET") {
-                response = dynamicContentHandler.doGET();
+            if (request.getRequestMethod().equals("GET")) {
+                response = dynamicContentHandler.doGET(request);
             } else {
-                response = dynamicContentHandler.doPOST();
+                response = dynamicContentHandler.doPOST(request);
             }
         } else {
             // 静的
