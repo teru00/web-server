@@ -19,8 +19,6 @@ class HTTPResponse {
      * レスポンスステタースラインを表す。
      * e.g.) HTTP/1.1 200 OK
      */
-    private String statusLine;
-
     private int statusCode;
     // setter
     public void setStatusCode(int statusCode) {
@@ -154,12 +152,6 @@ class HTTPResponse {
         return contentType;
     }
 
-    /**
-     * テスト用のメソッド
-     */
-    String getStatusLine() {
-        return this.statusLine;
-    }
 
     /**
      * HTTPレスポンスをクライアントに送信する処理
