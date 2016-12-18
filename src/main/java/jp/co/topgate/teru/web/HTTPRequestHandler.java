@@ -1,5 +1,8 @@
 package jp.co.topgate.teru.web;
 
+import jp.co.topgate.teru.web.http.HTTPRequest;
+import jp.co.topgate.teru.web.http.HTTPResponse;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

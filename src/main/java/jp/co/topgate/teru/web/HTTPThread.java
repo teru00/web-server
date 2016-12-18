@@ -1,5 +1,8 @@
 package jp.co.topgate.teru.web;
 
+import jp.co.topgate.teru.web.http.HTTPRequest;
+import jp.co.topgate.teru.web.http.HTTPResponse;
+
 import java.io.InputStream;
 import java.net.Socket;
 

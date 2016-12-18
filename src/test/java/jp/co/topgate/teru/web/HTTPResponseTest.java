@@ -1,5 +1,6 @@
 package jp.co.topgate.teru.web;
 
+import jp.co.topgate.teru.web.http.HTTPResponse;
 import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
