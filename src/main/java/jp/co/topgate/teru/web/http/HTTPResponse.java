@@ -1,4 +1,4 @@
-package jp.co.topgate.teru.web;
+package jp.co.topgate.teru.web.http;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  *　クライアントに送信するHTTPレスポンスを生成するクラス。
  */
-class HTTPResponse {
+public class HTTPResponse {
 
     /**
      * レスポンスステタースラインを表す。
@@ -71,7 +71,7 @@ class HTTPResponse {
      * @param name ヘッダー名
      * @param value 値
      */
-    void setHeader(String name, String value) {
+    public void setHeader(String name, String value) {
         this.headersField.put(name, value);
     }
 
@@ -93,7 +93,7 @@ class HTTPResponse {
      * Mapで管理していたヘッダーフィールドの要素を書き出す
      * @return ヘッダーフィールドのStringデータ
      */
-    String getHeadersField() {
+    public String getHeadersField() {
         final String CRLF = "\r\n";
         StringBuilder buff = new StringBuilder();
 
@@ -113,7 +113,7 @@ class HTTPResponse {
      *
      * @param messageBodyError エラーコンテンツ
      */
-    void setMessageBodyError(String messageBodyError) {
+    public void setMessageBodyError(String messageBodyError) {
         this.messageBodyError = messageBodyError;
     }
 
@@ -122,7 +122,7 @@ class HTTPResponse {
      *
      * @param file 静的ファイル
      */
-    void setMessageBody(File file) {
+    public void setMessageBody(File file) {
         this.messageBody = file;
     }
 
@@ -133,7 +133,7 @@ class HTTPResponse {
      * @param filename Content Typeを決定するために必要なリソースファイル名
      * @return なし
      */
-    String getContentType(String filename) {
+    public String getContentType(String filename) {
         Map<String, String> contentTypeMap = new HashMap<String, String>() {
             {
                 put("html", "text/html");

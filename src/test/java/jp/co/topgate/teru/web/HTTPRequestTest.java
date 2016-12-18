@@ -1,5 +1,6 @@
 package jp.co.topgate.teru.web;
 
+import jp.co.topgate.teru.web.http.HTTPRequest;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

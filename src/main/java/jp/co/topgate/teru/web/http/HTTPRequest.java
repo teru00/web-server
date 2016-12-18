@@ -1,4 +1,4 @@
-package jp.co.topgate.teru.web;
+package jp.co.topgate.teru.web.http;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -8,7 +8,7 @@ import java.net.URLDecoder;
  * クライアントから取得したHTTPリクエストの状態や
  * レスポンスを送信するための振る舞いを持つクラス。
  */
-class HTTPRequest {
+public class HTTPRequest {
     
     private String requestMethod;
     private String url;
@@ -17,7 +17,7 @@ class HTTPRequest {
      * inputStreamを使ってHTTPRequestオブジェクトに初期値を設定する。
      * @param inputStream ソケットから取得した入力ストリーム
      */
-     HTTPRequest(InputStream inputStream) {
+     public HTTPRequest(InputStream inputStream) {
         this.init(inputStream);
     }
 
@@ -54,7 +54,7 @@ class HTTPRequest {
      * 現時点ではGETかその他の判定をする
      * @return requestMethod
      */
-    String getRequestMethod() {
+    public String getRequestMethod() {
         return this.requestMethod;
     }
 
@@ -63,7 +63,7 @@ class HTTPRequest {
      * Webリソースの読み込みに必要なURIを返すインスタンスメソッド
      * @return requestURI
      */
-    String getRequestURI() throws Exception {
+    public String getRequestURI() throws Exception {
         String requestURI;
         if (this.url.contains("?")) {
             requestURI = this.url.substring(0, this.url.indexOf("?"));
@@ -78,7 +78,7 @@ class HTTPRequest {
      * リクエストURIを分析してリソースまでの適切なパス名を返す
      * @return resourcePath
      */
-    String getResourcePath() {
+    public String getResourcePath() {
         String resourcePath;
         String requestURI = null;
         // ここのtry-catchがわからん。
