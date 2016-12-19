@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by terufumishimoji on 2016/12/16.
  */
-public class StaticContentHandler {
+public class StaticContentHandler implements Handler {
     public HTTPResponse doGET(HTTPRequest request) {
 
         HTTPResponse response = new HTTPResponse();
@@ -31,6 +31,8 @@ public class StaticContentHandler {
                 response.setStatusCode(404);
                 response.setReasonPhrase("Not Found");
                 response.setHeader("Content-Type", "text/html");
+                // TemplateErr templateErr = new TemplateErr(statusCode, reasonPhrase);
+                // templateErr.generate()
                 response.setMessageBodyError(errorHandle("404"));
             }
 
