@@ -18,7 +18,7 @@ public class ErrorTemplate {
      * @return エラーコンテンツ
      */
     String errorHandle(String errorStatus) {
-        Map<String, String> errorMessage = new HashMap<String, String>() {
+        final Map<String, String> errorMessage = new HashMap<String, String>() {
             {
                 put("404", "Not Found");
                 put("405", "Method not allowed Explained");
