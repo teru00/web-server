@@ -6,18 +6,16 @@ import java.io.IOException;
  *
  * リクエストオブジェクトを分析して、適切なハンドラを割りあてるクラス。
  */
-class HTTPRequestHandler {
+class HandlerDispatch {
 
     /**
-     *
-     * 受信したリクエストを分析して適切なハンドラにレスポンスを組み立てをデリゲートする。
-     * リクエストURIに応じて、リソースファイルの読み込みを行う。
+     * リクエストを適切なハンドラにディスパッチ（タスクを振る）する。
      *
      * @param request HTTPRequestオブジェクト
      * @return response HTTPResponseオブジェクト
      * @throws IOException 入出力の例外
      */
-    HTTPResponse handle(HTTPRequest request) throws Exception {
+    HTTPResponse dispatch(HTTPRequest request) throws Exception {
         HTTPResponse response = new HTTPResponse();
         HandlerMap handlerMap = new HandlerMap();
         Handler handler = handlerMap.getHandler(request.getRequestURI());
@@ -40,6 +38,7 @@ class HTTPRequestHandler {
             response = staticContentHandler.doGET(request);
         }
 
+        // わざわざ呼び出し元のThreadまで返してあげないといけないほどのものか。
         return response;
     }
 }

@@ -34,18 +34,11 @@ class HTTPThread extends Thread {
 
             HTTPRequest request = new HTTPRequest(inputStream);
 
-            HTTPRequestHandler handler = new HTTPRequestHandler();
-
-            HTTPResponse response = handler.handle(request);
-
-            // メソッドごとにハンドラ処理を対応させる
-            // クライアントとTCP通信のやり取りを行うHTTPThreadにリクエストメソッドの振り分けをさせている。
-            // リクエストメソッドの振り分けはどこでやるべきなのか？
-            // リクエストメソッドの主な種類は4つ。get post delete put 任意（ファストリーなどは任意なものを使っている）
-            // getはwebリソースの要求
-            // postはフォームからデータを送信する。データはリクエストとして送信されてくるのだが、
-            // データを保持する場所はリクエストURIのリクエストパラメータになる。
-
+            HandlerDispatch handlerDispatch = new HandlerDispatch();
+            // ディスパッチの処理はハンドラにHTTP処理を委譲（元々はこのクラスが処理をする権限を持っていた）する役割を持っている。
+            // デリゲート先は引数で取得したリクエストのURIにあらかじめマッピング定義をされているハンドラが呼ばれる。
+            // マッピング定義されていないURI（例外）の場合は、
+            HTTPResponse response = handlerDispatch.dispatch(request);
 
             response.respond(socket.getOutputStream());
 

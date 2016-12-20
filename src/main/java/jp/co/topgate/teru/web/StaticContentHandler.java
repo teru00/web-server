@@ -7,6 +7,8 @@ import java.util.Map;
 // 静的ファイルサーバ
 
 /**
+ * 静的ファイルサーバ
+ *
  * Created by terufumishimoji on 2016/12/16.
  */
 public class StaticContentHandler implements Handler {
@@ -27,12 +29,17 @@ public class StaticContentHandler implements Handler {
                 response.setMessageBody(file);
 
             } else {
+                // 404ハンドリング
+                ErrorTemplate errorTemplate = new ErrorTemplate();
+                errorTemplate.errorHandle("404");
+                // レスポンスボディにセッティングするまでの責務を委譲するかの判断も可能になる。
+                // その場合はresponseが依存するので、状態を持つ必要がある。
+                // 例えば、errorHandle(statusCode, response);みたいな。
+
                 System.out.println("リソースは存在しませんでした。");
                 response.setStatusCode(404);
                 response.setReasonPhrase("Not Found");
                 response.setHeader("Content-Type", "text/html");
-                // TemplateErr templateErr = new TemplateErr(statusCode, reasonPhrase);
-                // templateErr.generate()
                 response.setMessageBodyError(errorHandle("404"));
             }
 
