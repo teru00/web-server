@@ -33,12 +33,15 @@ public class HandlerMap {
      */
     private Map<String, Handler> init() {
         // Java SE 7 から可能になったダイヤモンド演算子
-        final Map<String, Handler> handlerMap = new HashMap<>();
-        Handler dynamicContentHandler = new DynamicContentHandler();
-        Handler staticContentHandler = new StaticContentHandler();
-        handlerMap.put("program/board", dynamicContentHandler);
-        handlerMap.put("/", staticContentHandler);
+        final Map<String, Handler> handlerMap = new HashMap<String, Handler>(){
+            {
+                Handler dynamicContentHandler = new DynamicContentHandler();
+                Handler staticContentHandler = new StaticContentHandler();
 
+                put("program/board", dynamicContentHandler);
+                put("/", staticContentHandler);
+            }
+        };
         return handlerMap;
     }
 
@@ -50,21 +53,8 @@ public class HandlerMap {
 // 議論：Mapにはfinalをつけて、クラスが確保するメモリに帰するデータ構造にしよう。
 // finalをつけると静的メンバとなる
 // 議論：匿名クラスを使おう
+// 議論：URLパターンを考える
+// テスト
+// リファクタリング
 
-// マッピングクラス
-// Factoryも兼ね備えている
-// 要求に応じてできたてほやほやのインスタンスちゃんを返してあげる。
-// ちなみに、型を抽象化した型に設定して、呼び出し側が抽象的な命令を
-// 出せるようにする。
-
-// やることマップについて調査する
-// 実装する
-// 実装が正しいか判断する
-// テストする
-// リファクタリングする
-
-// マッピングのURIルール
-// program/board
-// /
-//
 
