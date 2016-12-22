@@ -16,8 +16,12 @@ public abstract class Handler {
         // が勝手に呼び出される場合があるのだ。
         // つまり、そういった異常系に対してどう対処するかというのがここでの定義の肝なのだ。
         HTTPResponse response = new HTTPResponse();
+        response.setStatusCode(404);
+        response.setReasonPhrase("Not Found");
+        Template errorTemplate = new ErrorTemplate(request, response);
+        // responseボディのセッティングが内包されている分可読性が低いような気がする。
+        errorTemplate.generate();
         return response;
-
     }
 }
 
