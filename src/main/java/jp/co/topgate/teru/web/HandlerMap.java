@@ -19,6 +19,8 @@ public class HandlerMap {
      * 初期化時にコンストラクタ内でマッピングを行う。
      * インスタンス生成後はマッピングデータを状態として保持している。
      * 制御側（ディスパッチャー（割り当て人））の呼び出しに応じて（メッセージング）ハンドラを与える。
+     * 渡されたURIを元に必ずハンドラを返す。
+     *
      */
     public HandlerMap() {
         // マッピングの初期化
@@ -38,7 +40,7 @@ public class HandlerMap {
                 Handler dynamicContentHandler = new DynamicContentHandler();
                 Handler staticContentHandler = new StaticContentHandler();
 
-                put("program/board", dynamicContentHandler);
+                put("program/board/", dynamicContentHandler);
                 put("/", staticContentHandler);
             }
         };
@@ -46,15 +48,12 @@ public class HandlerMap {
     }
 
     public Handler getHandler(String url) {
-        Handler handler = this.handlerMap.get(url);
+        Handler handler;
+        if (this.handlerMap.containsKey(url)) {
+            handler = this.handlerMap.get(url);
+        } else {
+            handler = this.handlerMap.get("/");
+        }
         return handler;
     }
 }
-// 議論：Mapにはfinalをつけて、クラスが確保するメモリに帰するデータ構造にしよう。
-// finalをつけると静的メンバとなる
-// 議論：匿名クラスを使おう
-// 議論：URLパターンを考える
-// テスト
-// リファクタリング
-
-

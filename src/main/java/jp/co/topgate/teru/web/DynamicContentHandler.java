@@ -1,15 +1,15 @@
 package jp.co.topgate.teru.web;
 
-class DynamicContentHandler implements Handler {
+class DynamicContentHandler extends Handler {
 
     /**
      * GETメソッドが送信されてきた時の処理
      *
-     * @param request
-     * @return
-     * @throws Exception
+     * @param request HTTPリクエスト
+     * @return HTTPレスポンス
      */
-    HTTPResponse doGET(HTTPRequest request) throws Exception {
+    @Override
+    public HTTPResponse handleGet(HTTPRequest request) {
         HTTPResponse response = new HTTPResponse();
         return response;
     }
@@ -17,10 +17,11 @@ class DynamicContentHandler implements Handler {
     /**
      * POSTメソッドが送信されてきた時の処理
      *
-     * @param request
-     * @return
+     * @param request HTTPリクエスト
+     * @return HTTPレスポンス
      */
-    HTTPResponse doPOST(HTTPRequest request) {
+    @Override
+    public HTTPResponse handlePost(HTTPRequest request) {
         HTTPResponse response = new HTTPResponse();
         return response;
     }

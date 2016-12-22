@@ -4,15 +4,19 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-// 静的ファイルサーバ
-
 /**
  * 静的ファイルサーバ
  *
  * Created by terufumishimoji on 2016/12/16.
  */
-public class StaticContentHandler implements Handler {
-    public HTTPResponse doGET(HTTPRequest request) {
+public class StaticContentHandler extends Handler {
+    /**
+     * リクエストを解析して適切なレスポンスを組み立てる。
+     * @param request HTTPリクエスト
+     * @return HTTPレスポンス
+     */
+    @Override
+    public HTTPResponse handleGet(HTTPRequest request) {
 
         HTTPResponse response = new HTTPResponse();
 
