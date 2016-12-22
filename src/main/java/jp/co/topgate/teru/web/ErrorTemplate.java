@@ -5,11 +5,9 @@ package jp.co.topgate.teru.web;
  */
 public class ErrorTemplate extends Template {
 
-    HTTPRequest request;
     HTTPResponse response;
 
-    ErrorTemplate(HTTPRequest request, HTTPResponse response) {
-        this.request = request;
+    ErrorTemplate(HTTPResponse response) {
         this.response = response;
     }
 

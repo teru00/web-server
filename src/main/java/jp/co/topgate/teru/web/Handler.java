@@ -3,11 +3,15 @@ package jp.co.topgate.teru.web;
 // 抽象クラス
 public abstract class Handler {
 
-    public HTTPResponse handleGet(HTTPRequest request) {
-        HTTPResponse response = new HTTPResponse();
-        return response;
+    public void handleGet(HTTPRequest request, HTTPResponse response) {
+        response.setStatusCode(405);
+        response.setReasonPhrase("Method Not Allowed");
+        ErrorTemplate errorTemplate = new ErrorTemplate(response);
+        errorTemplate.generate();
+        response.respond();
+        // ここでオブジェクトの型をTemplateにする意味はあるのか
     }
-    public HTTPResponse handlePost(HTTPRequest request) {
+    public void handlePost(HTTPRequest request, HTTPResponse response) {
         // POSTリクエストが必要ない場合でも、継承すると呼び出し可能になる。
         // NullPointerExceptionがどこかで発生するので、ここで、明確にErrorを発生させておく。
         // 本家Servletでは、 Versionを確認している。
@@ -15,13 +19,16 @@ public abstract class Handler {
         // 呼び出し元がhandlePost()にディスパッチする処理を自動化していた場合、抽象クラスから継承したメソッド
         // が勝手に呼び出される場合があるのだ。
         // つまり、そういった異常系に対してどう対処するかというのがここでの定義の肝なのだ。
-        HTTPResponse response = new HTTPResponse();
-        response.setStatusCode(404);
-        response.setReasonPhrase("Not Found");
-        Template errorTemplate = new ErrorTemplate(request, response);
+        response.setStatusCode(405);
+        response.setReasonPhrase("Method Not Allowed");
+        ErrorTemplate errorTemplate = new ErrorTemplate(response);
         // responseボディのセッティングが内包されている分可読性が低いような気がする。
         errorTemplate.generate();
-        return response;
+        response.respond();
     }
 }
-
+/*
+requestが利用されていないアンチパターンに対してどう対応するか。（一応クエリパラメータを使う場合もある）
+responseがここで呼び出されることで例外処理を行わないといけない。
+throwsしちゃおうかな,,,
+ */

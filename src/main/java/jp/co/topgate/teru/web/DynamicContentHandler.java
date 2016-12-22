@@ -9,9 +9,7 @@ class DynamicContentHandler extends Handler {
      * @return HTTPレスポンス
      */
     @Override
-    public HTTPResponse handleGet(HTTPRequest request) {
-        HTTPResponse response = new HTTPResponse();
-        return response;
+    public void handleGet(HTTPRequest request, HTTPResponse response) {
     }
 
     /**
@@ -21,10 +19,21 @@ class DynamicContentHandler extends Handler {
      * @return HTTPレスポンス
      */
     @Override
-    public HTTPResponse handlePost(HTTPRequest request) {
-        HTTPResponse response = new HTTPResponse();
-
-        return response;
+    public void handlePost(HTTPRequest request) {
+        /**
+         * requestをローディングする。
+         * ボディを読み込み、状態保持のための変数を用意してあげる。
+         * name="hogehoge", message="foobar"
+         * インメモリにデータを書き込む。
+         * インメモリからデータを読み込み、
+         * テンプレート(HTML)を作成する。
+         * Note: POSTメソッドはHTMLのform要素を利用してデータを
+         * サーバに送信する役目を持つのはわかった。さらには、レスポンスを
+         * 適当に返しておくれと伝える役目もあるそうだが、それについての詳しい情報がないだろうか。
+         * GETとPOSTの返すレスポンスの組み立ての違いはなんだろうか？
+         * 組み立てがシュール
+         * Templateオブジェクトにレスポンスの文脈を持ち込んで、
+         */
     }
 }
 

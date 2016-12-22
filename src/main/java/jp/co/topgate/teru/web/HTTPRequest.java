@@ -12,6 +12,7 @@ class HTTPRequest {
     
     private String requestMethod;
     private String url;
+    private String requestBody;
 
     /**
      * inputStreamを使ってHTTPRequestオブジェクトに初期値を設定する。
@@ -94,5 +95,9 @@ class HTTPRequest {
             resourcePath = "src/main/resources" + requestURI.replaceAll("/+", "/");
         }
         return resourcePath;
+    }
+
+    String getRequestBody() {
+        return this.requestBody;
     }
 }

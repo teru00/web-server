@@ -17,16 +17,14 @@ class HandlerDispatch {
      * @return response HTTPResponseオブジェクト
      * @throws IOException 入出力の例外
      */
-    HTTPResponse dispatch(HTTPRequest request) throws Exception {
-
-        HTTPResponse response = new HTTPResponse();
+    HTTPResponse dispatch(HTTPRequest request, HTTPResponse response) throws Exception {
 
         HandlerMap handlerMap = new HandlerMap();
         Handler handler = handlerMap.getHandler(request.getRequestURI());
 
         // "GET"はマッジクワード？なので定数化します。
         if (request.getRequestMethod().equals(METHOD_GET)) {
-            handler.handleGet(request);
+            handler.handleGet(request, response);
         } else if (request.getRequestURI().equals(METHOD_POST)) {
             handler.handlePost(request);
         }

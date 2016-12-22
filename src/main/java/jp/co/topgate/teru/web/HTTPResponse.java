@@ -20,7 +20,7 @@ class HTTPResponse {
      * e.g.) HTTP/1.1 200 OK
      */
     private String statusLine;
-
+    private OutputStream outputStream;
     private int statusCode;
     // setter
     public void setStatusCode(int statusCode) {
@@ -33,6 +33,10 @@ class HTTPResponse {
         this.reasonPhrase = reasonPhrase;
     }
 
+    // コンストラクタ
+    HTTPResponse(OutputStream outputstream) {
+        this.outputStream = outputstream;
+    }
 
     // handleの中でsetされている
     // statusCodeなど新しい状態を持たせるやり方
@@ -164,10 +168,9 @@ class HTTPResponse {
     /**
      * HTTPレスポンスをクライアントに送信する処理
      *
-     * @param outputStream 出力先ストリーム
      * @throws IOException IO系の例外
      */
-    public void respond(OutputStream outputStream) throws IOException {
+    public void respond() throws IOException {
         final String CRLF = "\r\n";
         final String httpVersion = "HTTP/1.1";
         String statusCodeString = String.valueOf(this.statusCode);
@@ -177,19 +180,19 @@ class HTTPResponse {
             DataSource dataSource = new FileDataSource(this.messageBody);
             DataHandler dataHandler = new DataHandler(dataSource);
             byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
-            outputStream.write(responseHeader, 0, responseHeader.length);
-            dataHandler.writeTo(outputStream);
-            outputStream.flush();
-            outputStream.close();
+            this.outputStream.write(responseHeader, 0, responseHeader.length);
+            dataHandler.writeTo(this.outputStream);
+            this.outputStream.flush();
+            this.outputStream.close();
         } else {
             byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             byte[] responseBody = this.messageBodyError.getBytes();
             byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
             System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
             System.arraycopy(responseBody, 0, responseMessage, responseHeader.length, responseBody.length);
-            outputStream.write(responseMessage, 0, responseMessage.length);
-            outputStream.flush();
-            outputStream.close();
+            this.outputStream.write(responseMessage, 0, responseMessage.length);
+            this.outputStream.flush();
+            this.outputStream.close();
         }
     }
 
