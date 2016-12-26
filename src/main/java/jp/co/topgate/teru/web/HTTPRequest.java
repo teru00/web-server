@@ -39,21 +39,20 @@ class HTTPRequest {
 
             if (this.requestMethod.equals("POST")) {
                 String contentLengthString = "";
-                // int contentLength;
+                int contentLength;
                 while(line != null  && !line.isEmpty()) {
                     line = br.readLine();
                     System.out.println(line);
                     if (line.startsWith("Content-Length")) {
                         String[] tmp = line.split(" ");
                         contentLengthString = tmp[1];
-                        // contentLength = Integer.parseInt(contentLengthString);
+                        contentLength = Integer.parseInt(contentLengthString);
                     }
                 }
-                System.out.println(line);
-                line = br.readLine();
-                System.out.println(line);
-                // this.requestBody = line;
-                //System.out.println(contentLengthString);
+                char[] cbuf = new char[contentLength];
+                br.read(cbuf);
+                String content = new String(cbuf);
+                this.requestBody = content;
             }
         } catch (IOException e) {
             System.err.println("ERROR: "+ e);
