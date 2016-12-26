@@ -2,6 +2,8 @@ package jp.co.topgate.teru.web;
 
 import java.io.*;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -26,7 +28,7 @@ class HTTPRequest {
      * HTTPRequestオブジェクトの初期値を設定するインスタンスメソッド。
      * @param inputStream 入力ストリーム
      */
-     private void init(InputStream inputStream) {
+    private void init(InputStream inputStream) {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         System.out.println("今から入力ストリーム経由でデータを取得します");
         try {
@@ -35,14 +37,24 @@ class HTTPRequest {
             this.requestMethod = requestLine[0];
             this.url = requestLine[1];
 
-            System.out.println("リクエストメッセージ===========");
-            System.out.println(line);
-            while(line != null  && !line.isEmpty()) {
+            if (this.requestMethod.equals("POST")) {
+                String contentLengthString = "";
+                // int contentLength;
+                while(line != null  && !line.isEmpty()) {
+                    line = br.readLine();
+                    System.out.println(line);
+                    if (line.startsWith("Content-Length")) {
+                        String[] tmp = line.split(" ");
+                        contentLengthString = tmp[1];
+                        // contentLength = Integer.parseInt(contentLengthString);
+                    }
+                }
+                System.out.println(line);
                 line = br.readLine();
                 System.out.println(line);
+                // this.requestBody = line;
+                //System.out.println(contentLengthString);
             }
-            System.out.println("リクエストメッセージ===========");
-
         } catch (IOException e) {
             System.err.println("ERROR: "+ e);
             e.getStackTrace();
@@ -97,6 +109,20 @@ class HTTPRequest {
         return resourcePath;
     }
 
+    String getRequestPamameter(String name) {
+        // 外部から指定されたnameが存在しなかった場合の例外処理
+        Map<String, String> map = new HashMap<>();
+        String[] temp = requestBody.split("&");
+        for (String set: temp) {
+            String[] formData = set.split("=");
+            map.put(formData[0], formData[1]);
+        }
+        String value = map.get(name);
+        return value;
+        // マッピング処理はどこかに分けたほうが見通しは良いかも。
+        // 誰にとっての見通しかどうか。
+        // privateメソッドを使えばええんちゃう？
+    }
     String getRequestBody() {
         return this.requestBody;
     }

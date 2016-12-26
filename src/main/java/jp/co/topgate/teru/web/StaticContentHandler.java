@@ -26,7 +26,7 @@ class StaticContentHandler extends Handler {
                 response.setReasonPhrase("OK");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
                 response.setMessageBody(file);
-                response.respond();
+                //response.respond();
             } else {
                 System.out.println("リソースは存在しませんでした。");
                 response.setStatusCode(404);
@@ -34,7 +34,7 @@ class StaticContentHandler extends Handler {
                 response.setHeader("Content-Type", "text/html");
                 ErrorTemplate errorTemplate = new ErrorTemplate(response);
                 errorTemplate.generate();
-                response.respond();
+                //response.respond();
             }
 
         } else {
@@ -44,7 +44,7 @@ class StaticContentHandler extends Handler {
             response.setHeader("Content-Type", "text/html");
             ErrorTemplate errorTemplate = new ErrorTemplate(response);
             errorTemplate.generate();
-            response.respond();
+            //response.respond();
         }
     }
 }

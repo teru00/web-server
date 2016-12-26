@@ -8,7 +8,7 @@ public abstract class Handler {
         response.setReasonPhrase("Method Not Allowed");
         ErrorTemplate errorTemplate = new ErrorTemplate(response);
         errorTemplate.generate();
-        response.respond();
+        //response.respond();
         // ここでオブジェクトの型をTemplateにする意味はあるのか
     }
     public void handlePost(HTTPRequest request, HTTPResponse response) {
@@ -24,7 +24,7 @@ public abstract class Handler {
         ErrorTemplate errorTemplate = new ErrorTemplate(response);
         // responseボディのセッティングが内包されている分可読性が低いような気がする。
         errorTemplate.generate();
-        response.respond();
+        //response.respond();
     }
 }
 /*

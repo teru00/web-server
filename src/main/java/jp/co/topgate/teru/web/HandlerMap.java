@@ -40,7 +40,7 @@ public class HandlerMap {
                 Handler dynamicContentHandler = new DynamicContentHandler();
                 Handler staticContentHandler = new StaticContentHandler();
 
-                put("program/board/", dynamicContentHandler);
+                put("/program/board/", dynamicContentHandler);
                 put("/", staticContentHandler);
             }
         };

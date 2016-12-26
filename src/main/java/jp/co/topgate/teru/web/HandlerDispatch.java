@@ -26,7 +26,7 @@ class HandlerDispatch {
         if (request.getRequestMethod().equals(METHOD_GET)) {
             handler.handleGet(request, response);
         } else if (request.getRequestURI().equals(METHOD_POST)) {
-            handler.handlePost(request);
+            //handler.handlePost(request);
         }
 
         return response;

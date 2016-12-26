@@ -1,5 +1,7 @@
 package jp.co.topgate.teru.web;
 
+import java.io.IOException;
+
 class DynamicContentHandler extends Handler {
 
     /**
@@ -10,6 +12,38 @@ class DynamicContentHandler extends Handler {
      */
     @Override
     public void handleGet(HTTPRequest request, HTTPResponse response) {
+        System.out.println("動的ファイルは存在しました。");
+
+        response.setStatusCode(200);
+        response.setReasonPhrase("OK");
+        response.setHeader("Content-Type", "text/html");
+
+        // ビルダー
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<!DOCTYPE html>");
+        stringBuilder.append("<html lang=\"jp\">");
+        stringBuilder.append("<head>");
+        stringBuilder.append("<meta charset=\"utf-8\">");
+        stringBuilder.append("<title>The HTML5 Herald</title>");
+        stringBuilder.append("<meta name=\"description\" content=\"The HTML5 Herald\">");
+        stringBuilder.append("<meta name=\"author\" content=\"SitePoint\">");
+        stringBuilder.append("</head>");
+        stringBuilder.append("<body>");
+        stringBuilder.append("<form method=\"post\">");
+        stringBuilder.append("<input name=\"say\" value=\"Hi\">");
+        stringBuilder.append("<input name=\"to\" value=\"Mom\">");
+        stringBuilder.append("<button>Send my greetings</button>");
+        stringBuilder.append("</form>");
+        stringBuilder.append("</body>");
+        stringBuilder.append("</html>");
+
+        String content = stringBuilder.toString();
+        response.setMessageBodyError(content);
+        try {
+            response.respond();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -19,7 +53,7 @@ class DynamicContentHandler extends Handler {
      * @return HTTPレスポンス
      */
     @Override
-    public void handlePost(HTTPRequest request) {
+    public void handlePost(HTTPRequest request, HTTPResponse response) {
         /**
          * requestをローディングする。
          * ボディを読み込み、状態保持のための変数を用意してあげる。
