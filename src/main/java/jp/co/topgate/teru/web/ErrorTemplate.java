@@ -3,9 +3,9 @@ package jp.co.topgate.teru.web;
 /**
  * Created by terufumishimoji on 2016/12/20.
  */
-public class ErrorTemplate extends Template {
+class ErrorTemplate extends Template {
 
-    HTTPResponse response;
+    private HTTPResponse response;
 
     ErrorTemplate(HTTPResponse response) {
         this.response = response;

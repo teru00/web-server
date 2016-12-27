@@ -3,7 +3,6 @@ package jp.co.topgate.teru.web;
 import java.io.IOException;
 
 /**
- *
  * リクエストオブジェクトを分析して、適切なハンドラを割りあてるクラス。
  */
 class HandlerDispatch {
@@ -12,7 +11,6 @@ class HandlerDispatch {
     private static final String METHOD_POST = "POST";
     /**
      * リクエストを適切なハンドラにディスパッチ（タスクを振る）する。
-     *
      * @param request HTTPRequestオブジェクト
      * @return response HTTPResponseオブジェクト
      * @throws IOException 入出力の例外

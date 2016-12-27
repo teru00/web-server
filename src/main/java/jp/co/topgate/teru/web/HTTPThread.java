@@ -5,20 +5,17 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- *
  * サーバソケットで受信したクライアントと通信を行うためのスレッドクラス
  */
 class HTTPThread extends Thread {
 
     /**
-     *
      * クライアントソケット
      */
     private final Socket socket;
 
     /**
      * コンストラクタ
-     *
      * @param socket クライアントソケット
      */
     HTTPThread(Socket socket) {
@@ -27,7 +24,6 @@ class HTTPThread extends Thread {
 
     /**
      * スレッドを起動する
-     *
      */
     public void run() {
         try {

@@ -3,6 +3,12 @@ package jp.co.topgate.teru.web;
 // 抽象クラス
 public abstract class Handler {
 
+    /**
+     * GETリクエストを解析してレスポンスを組み立てるハンドラメソッド
+     * オーバーライドされることを意図した実装
+     * @param request HTTPリクエスト
+     * @param response HTTPレスポンス
+     */
     public void handleGet(HTTPRequest request, HTTPResponse response) {
         response.setStatusCode(405);
         response.setReasonPhrase("Method Not Allowed");
@@ -11,6 +17,13 @@ public abstract class Handler {
         //response.respond();
         // ここでオブジェクトの型をTemplateにする意味はあるのか
     }
+
+    /**
+     * POSTリクエストを解析してレスポンスを組み立てるハンドラメソッド
+     * オーバーライドされることを意図した実装
+     * @param request HTTPリクエスト
+     * @param response HTTPレスポンス
+     */
     public void handlePost(HTTPRequest request, HTTPResponse response) {
         // POSTリクエストが必要ない場合でも、継承すると呼び出し可能になる。
         // NullPointerExceptionがどこかで発生するので、ここで、明確にErrorを発生させておく。

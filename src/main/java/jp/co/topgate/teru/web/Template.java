@@ -10,5 +10,4 @@ public abstract class Template {
 
 /*
 抽象クラスのメソッドは引数設定もオーバーライドできるのかえ。
-
  */

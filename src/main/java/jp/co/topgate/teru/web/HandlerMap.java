@@ -20,9 +20,8 @@ public class HandlerMap {
      * インスタンス生成後はマッピングデータを状態として保持している。
      * 制御側（ディスパッチャー（割り当て人））の呼び出しに応じて（メッセージング）ハンドラを与える。
      * 渡されたURIを元に必ずハンドラを返す。
-     *
      */
-    public HandlerMap() {
+    HandlerMap() {
         // マッピングの初期化
         // コンストラクタでprivateメソッドを読んでいる
         this.handlerMap = init();
@@ -30,7 +29,6 @@ public class HandlerMap {
 
     /**
      * ハンドラとURLをマッピングする処理
-     *
      * @return Map
      */
     private Map<String, Handler> init() {
@@ -47,7 +45,7 @@ public class HandlerMap {
         return handlerMap;
     }
 
-    public Handler getHandler(String url) {
+    Handler getHandler(String url) {
         Handler handler;
         if (this.handlerMap.containsKey(url)) {
             handler = this.handlerMap.get(url);

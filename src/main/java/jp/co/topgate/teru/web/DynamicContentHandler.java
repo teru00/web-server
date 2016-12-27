@@ -6,9 +6,7 @@ class DynamicContentHandler extends Handler {
 
     /**
      * GETメソッドが送信されてきた時の処理
-     *
      * @param request HTTPリクエスト
-     * @return HTTPレスポンス
      */
     @Override
     public void handleGet(HTTPRequest request, HTTPResponse response) {
@@ -48,9 +46,7 @@ class DynamicContentHandler extends Handler {
 
     /**
      * POSTメソッドが送信されてきた時の処理
-     *
      * @param request HTTPリクエスト
-     * @return HTTPレスポンス
      */
     @Override
     public void handlePost(HTTPRequest request, HTTPResponse response) {

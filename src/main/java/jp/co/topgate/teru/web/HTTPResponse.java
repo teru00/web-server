@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  *　クライアントに送信するHTTPレスポンスを生成するクラス。
  */
 class HTTPResponse {
@@ -114,7 +113,6 @@ class HTTPResponse {
 
     /**
      * エラーコンテンツを保持するフィールド
-     *
      * @param messageBodyError エラーコンテンツ
      */
     void setMessageBodyError(String messageBodyError) {
@@ -123,7 +121,6 @@ class HTTPResponse {
 
     /**
      * クライアントに送信するリソースを保持するフィールド
-     *
      * @param file 静的ファイル
      */
     void setMessageBody(File file) {
@@ -133,7 +130,6 @@ class HTTPResponse {
     /**
      * 指定されたwebリソースの拡張子を抽出して、Content Typeを決定する。
      * このContent Typeはブラウザが読み込んだリソースを認識するのに役立つ。
-     *
      * @param filename Content Typeを決定するために必要なリソースファイル名
      * @return なし
      */
@@ -167,7 +163,6 @@ class HTTPResponse {
 
     /**
      * HTTPレスポンスをクライアントに送信する処理
-     *
      * @throws IOException IO系の例外
      */
     public void respond() throws IOException {

@@ -4,7 +4,6 @@ import java.io.File;
 
 /**
  * 静的ファイルサーバ
- *
  * Created by terufumishimoji on 2016/12/16.
  */
 class StaticContentHandler extends Handler {
