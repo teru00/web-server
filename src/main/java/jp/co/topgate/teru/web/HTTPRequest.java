@@ -117,17 +117,24 @@ class HTTPRequest {
      * @param name
      * @return
      */
-    String getRequestPamameter(String name) {
-        Map<String, String> map = new HashMap<>();
-        String[] tmp = requestBody.split("&");
-        for (String element : tmp) {
-            String[] postData = element.split("=");
-            map.put(postData[0], postData[1]);
+    String getRequestParameter(String name) {
+        Map<String, String> requestParameter = new HashMap<>();
+        String[] params = requestBody.split("&");
+        for (String param : params) {
+            String[] tmp = param.split("=");
+            requestParameter.put(tmp[0], tmp[1]);
         }
-        String value = map.get(name);
-        return value;
+        return requestParameter.get(name);
     }
     String getRequestBody() {
         return this.requestBody;
+    }
+
+    /**
+     * テスト用のメソッド
+     * @param requestBody リクエスボディの内容
+     */
+    void setRequestBody(String requestBody) {
+        this.requestBody = requestBody;
     }
 }

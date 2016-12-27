@@ -85,11 +85,11 @@ public class HTTPRequestTest {
         stringBuilder.append(CRLF);
         stringBuilder.append(postData);
         String data = stringBuilder.toString();
-        getRequestParameterHelper("test", "name", data);
-        getRequestParameterHelper("sex", "man", data);
-        getRequestParameterHelper("message", "hello, world", data);
+        getRequestParameterHelper("bob", "name", data, postData);
+        getRequestParameterHelper("man", "sex", data, postData);
+        getRequestParameterHelper("hello, world", "message", data, postData);
 
-        postData = "name=mike&sex=woman&body=hey&japanese=off";
+        postData = "name=mike&sex=woman&message=hey&japanese=off";
         contentLength = postData.length();
         stringBuilder.setLength(0);
         stringBuilder.append("POST program/board HTTP/1.1" + CRLF);
@@ -97,24 +97,16 @@ public class HTTPRequestTest {
         stringBuilder.append(CRLF);
         stringBuilder.append(postData);
         data = stringBuilder.toString();
-        getRequestParameterHelper("mike", "name", data);
-        getRequestParameterHelper("woman", "sex", data);
-        getRequestParameterHelper("hey", "message", data);
-        getRequestParameterHelper("japanese", "off", data);
+        getRequestParameterHelper("mike", "name", data, postData);
+        getRequestParameterHelper("woman", "sex", data, postData);
+        getRequestParameterHelper("hey", "message", data, postData);
+        getRequestParameterHelper("off", "japanese", data, postData);
     }
 
-    /**
-     * getRequestParameter()のヘルパーメソッド
-     * @param expected 期待値
-     * @param name 取得したいパラメータ名
-     * @param data パターンデータ
-     */
-    private void getRequestParameterHelper(String expected, String name, String data) {
+    private void getRequestParameterHelper(String expected, String name, String data, String postData) {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
         HTTPRequest request = new HTTPRequest(inputStream);
-        String requestBody = request.getRequestBody();
-        assertThat(request.getRequestPamameter(name), is(expected));
+        request.setRequestBody(postData);
+        assertThat(request.getRequestParameter(name), is(expected));
     }
-
-
 }
