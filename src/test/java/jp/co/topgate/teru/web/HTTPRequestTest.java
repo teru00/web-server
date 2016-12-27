@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class HTTPRequestTest {
+    static final String CRLF = "\n\r";
 
     // インターフェースによる実装もある。
     @Test
@@ -73,5 +74,22 @@ public class HTTPRequestTest {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
         HTTPRequest request = new HTTPRequest(inputStream);
         assertThat(request.getResourcePath(), is(expected));
+    }
+
+    @Test
+    public void getRequestParameter() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("POST /program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-length: " + CRLF);
+        stringBuilder.append(CRLF);
+        stringBuilder.append("name=test&sex=man&body=hello, world");
+        String data = stringBuilder.toString();
+        getRequestParameterHelper("test", "name", data);
+    }
+
+    private void getRequestParameterHelper(String expected, String name, String data) {
+        InputStream inputStream = new ByteArrayInputStream(data.getBytes());
+        HTTPRequest request = new HTTPRequest(inputStream);
+        assertThat(request.getRequestPamameter(name), is(expected));
     }
 }

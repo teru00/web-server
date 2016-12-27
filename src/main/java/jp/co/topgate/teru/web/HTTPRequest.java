@@ -25,7 +25,7 @@ class HTTPRequest {
     }
 
     /**
-     * HTTPRequestオブジェクトの初期値を設定するインスタンスメソッド。
+     * HTTPRequestの初期化処理を行うメソッド。
      * @param inputStream 入力ストリーム
      */
     private void init(InputStream inputStream) {
@@ -36,23 +36,26 @@ class HTTPRequest {
             String[] requestLine = line.split(" ");
             this.requestMethod = requestLine[0];
             this.url = requestLine[1];
-
             if (this.requestMethod.equals("POST")) {
                 String contentLengthString = "";
-                int contentLength;
+                int contentLength = 0;
                 while(line != null  && !line.isEmpty()) {
                     line = br.readLine();
                     System.out.println(line);
+
                     if (line.startsWith("Content-Length")) {
                         String[] tmp = line.split(" ");
                         contentLengthString = tmp[1];
                         contentLength = Integer.parseInt(contentLengthString);
                     }
                 }
-                char[] cbuf = new char[contentLength];
-                br.read(cbuf);
-                String content = new String(cbuf);
-                this.requestBody = content;
+                // content-lengthに何かしらの値が入っている場合（何かしらではなく限定したい）
+                if (contentLength != 0) {
+                    char[] cbuf = new char[contentLength];
+                    br.read(cbuf);
+                    String content = new String(cbuf);
+                    this.requestBody = content;
+                }
             }
         } catch (IOException e) {
             System.err.println("ERROR: "+ e);
@@ -108,19 +111,21 @@ class HTTPRequest {
         return resourcePath;
     }
 
+    /**
+     * リクエストボディのパラメータ名と値をマップで保持、取得可能にしているメソッド。
+     * パラメータ名を引数に渡すと値を返す。
+     * @param name
+     * @return
+     */
     String getRequestPamameter(String name) {
-        // 外部から指定されたnameが存在しなかった場合の例外処理
         Map<String, String> map = new HashMap<>();
-        String[] temp = requestBody.split("&");
-        for (String set: temp) {
-            String[] formData = set.split("=");
-            map.put(formData[0], formData[1]);
+        String[] tmp = requestBody.split("&");
+        for (String element : tmp) {
+            String[] postData = element.split("=");
+            map.put(postData[0], postData[1]);
         }
         String value = map.get(name);
         return value;
-        // マッピング処理はどこかに分けたほうが見通しは良いかも。
-        // 誰にとっての見通しかどうか。
-        // privateメソッドを使えばええんちゃう？
     }
     String getRequestBody() {
         return this.requestBody;
