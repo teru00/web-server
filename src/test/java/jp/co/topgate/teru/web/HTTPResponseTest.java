@@ -1,6 +1,11 @@
 package jp.co.topgate.teru.web;
 
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,16 +17,16 @@ public class HTTPResponseTest {
     @Test
     public void getHeadersField() {
         final String CRLF = "\r\n";
-        StringBuilder buff = new StringBuilder();
-        buff.append("Content-Type: text/html" + CRLF);
-        HTTPResponse response = new HTTPResponse();
+        HTTPResponse response = new HTTPResponse(new ByteArrayOutputStream());
         response.setHeader("Content-Type", "text/html");
-        assertThat(response.getHeadersField(), is(buff.toString()));
+        assertThat(response.getHeadersField(), is("Content-Type: text/html" + CRLF));
     }
 
     @Test
     public void getContentType() {
-        HTTPResponse response = new HTTPResponse();
+        OutputStream outputStream = new ByteArrayOutputStream();
+        HTTPResponse response = new HTTPResponse(outputStream);
+
         Map<String, String> testMap = new HashMap<String, String>() {
             {
                 put("test.html", "text/html");

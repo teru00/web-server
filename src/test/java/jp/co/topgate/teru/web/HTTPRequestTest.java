@@ -20,7 +20,6 @@ public class HTTPRequestTest {
 
     /**
      * 幾つかのパターンをテストするために用意したヘルパーメソッド
-     * h-はヘルパーという意味のprefix
      *
      * @param expected 期待値
      * @param data     テストデータ
@@ -78,32 +77,44 @@ public class HTTPRequestTest {
 
     @Test
     public void getRequestParameter() {
+        String postData = "name=bob&sex=man&message=hello, world";
+        int contentLength = postData.length();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("POST /program/board HTTP/1.1" + CRLF);
-        stringBuilder.append("Content-length: " + CRLF);
+        stringBuilder.append("POST program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-Length: " + String.valueOf(contentLength) + CRLF);
         stringBuilder.append(CRLF);
-        stringBuilder.append("name=bob&sex=man&message=hello, world");
+        stringBuilder.append(postData);
         String data = stringBuilder.toString();
         getRequestParameterHelper("test", "name", data);
         getRequestParameterHelper("sex", "man", data);
         getRequestParameterHelper("message", "hello, world", data);
 
-
+        postData = "name=mike&sex=woman&body=hey&japanese=off";
+        contentLength = postData.length();
         stringBuilder.setLength(0);
-        stringBuilder.append("POST /program/board HTTP/1.1" + CRLF);
-        stringBuilder.append("Content-length: " + CRLF);
+        stringBuilder.append("POST program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-Length: " + String.valueOf(contentLength) + CRLF);
         stringBuilder.append(CRLF);
-        stringBuilder.append("name=mike&sex=woman&body=hey&japanese=off");
-        String data = stringBuilder.toString();
+        stringBuilder.append(postData);
+        data = stringBuilder.toString();
         getRequestParameterHelper("mike", "name", data);
         getRequestParameterHelper("woman", "sex", data);
         getRequestParameterHelper("hey", "message", data);
         getRequestParameterHelper("japanese", "off", data);
     }
 
+    /**
+     * getRequestParameter()のヘルパーメソッド
+     * @param expected 期待値
+     * @param name 取得したいパラメータ名
+     * @param data パターンデータ
+     */
     private void getRequestParameterHelper(String expected, String name, String data) {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
         HTTPRequest request = new HTTPRequest(inputStream);
+        String requestBody = request.getRequestBody();
         assertThat(request.getRequestPamameter(name), is(expected));
     }
+
+
 }
