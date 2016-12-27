@@ -82,9 +82,23 @@ public class HTTPRequestTest {
         stringBuilder.append("POST /program/board HTTP/1.1" + CRLF);
         stringBuilder.append("Content-length: " + CRLF);
         stringBuilder.append(CRLF);
-        stringBuilder.append("name=test&sex=man&body=hello, world");
+        stringBuilder.append("name=bob&sex=man&message=hello, world");
         String data = stringBuilder.toString();
         getRequestParameterHelper("test", "name", data);
+        getRequestParameterHelper("sex", "man", data);
+        getRequestParameterHelper("message", "hello, world", data);
+
+
+        stringBuilder.setLength(0);
+        stringBuilder.append("POST /program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-length: " + CRLF);
+        stringBuilder.append(CRLF);
+        stringBuilder.append("name=mike&sex=woman&body=hey&japanese=off");
+        String data = stringBuilder.toString();
+        getRequestParameterHelper("mike", "name", data);
+        getRequestParameterHelper("woman", "sex", data);
+        getRequestParameterHelper("hey", "message", data);
+        getRequestParameterHelper("japanese", "off", data);
     }
 
     private void getRequestParameterHelper(String expected, String name, String data) {
