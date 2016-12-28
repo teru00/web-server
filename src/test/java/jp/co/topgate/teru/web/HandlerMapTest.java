@@ -28,7 +28,7 @@ public class HandlerMapTest {
         getHandlerHelper(staticContentHandler, "/sample");
         getHandlerHelper(staticContentHandler, "program/");
         getHandlerHelper(staticContentHandler, "program/board");
-        getHandlerHelper(dynamicContentHandler, "program/board/");
+        getHandlerHelper(dynamicContentHandler, "/program/board/");
     }
 
     /**
