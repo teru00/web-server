@@ -22,6 +22,7 @@ class HTTPRequest {
         init(inputStream);
     }
 
+
     /**
      * HTTPRequestの初期化処理を行うメソッド。
      * @param inputStream 入力ストリーム
