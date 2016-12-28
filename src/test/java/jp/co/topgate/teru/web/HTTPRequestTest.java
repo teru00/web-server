@@ -9,17 +9,17 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class HTTPRequestTest {
+    static final String CRLF = "\n\r";
 
     // インターフェースによる実装もある。
     @Test
     public void getRequestMethod() {
         getRequestMethodHelper("GET", "GET / HTTP/1.1");
-        getRequestMethodHelper("POST", "POST / HTTP/1.1");
+        getRequestMethodHelper("POST", "POST /program/board HTTP/1.1");
     }
 
     /**
      * 幾つかのパターンをテストするために用意したヘルパーメソッド
-     * h-はヘルパーという意味のprefix
      *
      * @param expected 期待値
      * @param data     テストデータ
@@ -73,5 +73,40 @@ public class HTTPRequestTest {
         InputStream inputStream = new ByteArrayInputStream(data.getBytes());
         HTTPRequest request = new HTTPRequest(inputStream);
         assertThat(request.getResourcePath(), is(expected));
+    }
+
+    @Test
+    public void getRequestParameter() {
+        String postData = "name=bob&sex=man&message=hello, world";
+        int contentLength = postData.length();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("POST program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-Length: " + String.valueOf(contentLength) + CRLF);
+        stringBuilder.append(CRLF);
+        stringBuilder.append(postData);
+        String data = stringBuilder.toString();
+        getRequestParameterHelper("bob", "name", data, postData);
+        getRequestParameterHelper("man", "sex", data, postData);
+        getRequestParameterHelper("hello, world", "message", data, postData);
+
+        postData = "name=mike&sex=woman&message=hey&japanese=off";
+        contentLength = postData.length();
+        stringBuilder.setLength(0);
+        stringBuilder.append("POST program/board HTTP/1.1" + CRLF);
+        stringBuilder.append("Content-Length: " + String.valueOf(contentLength) + CRLF);
+        stringBuilder.append(CRLF);
+        stringBuilder.append(postData);
+        data = stringBuilder.toString();
+        getRequestParameterHelper("mike", "name", data, postData);
+        getRequestParameterHelper("woman", "sex", data, postData);
+        getRequestParameterHelper("hey", "message", data, postData);
+        getRequestParameterHelper("off", "japanese", data, postData);
+    }
+
+    private void getRequestParameterHelper(String expected, String name, String data, String postData) {
+        InputStream inputStream = new ByteArrayInputStream(data.getBytes());
+        HTTPRequest request = new HTTPRequest(inputStream);
+        request.setRequestBody(postData);
+        assertThat(request.getRequestParameter(name), is(expected));
     }
 }

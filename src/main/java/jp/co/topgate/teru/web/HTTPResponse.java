@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  *　クライアントに送信するHTTPレスポンスを生成するクラス。
  */
 class HTTPResponse {
@@ -20,6 +19,39 @@ class HTTPResponse {
      * e.g.) HTTP/1.1 200 OK
      */
     private String statusLine;
+    private OutputStream outputStream;
+    private int statusCode;
+    // setter
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    private String reasonPhrase;
+    // setter
+    public void setReasonPhrase(String reasonPhrase) {
+        this.reasonPhrase = reasonPhrase;
+    }
+
+    // コンストラクタ
+    HTTPResponse(OutputStream outputstream) {
+        this.outputStream = outputstream;
+    }
+
+    // handleの中でsetされている
+    // statusCodeなど新しい状態を持たせるやり方
+    // メソッドを新しく定義するやり方
+    // statusCodeとreasonPhraseとVersionさえあれば事足りる
+    // 一番簡単なy利方としては、新しい状態を持たせること
+    // 何れにしても状態を持たせないといけないのでは、handle内での
+    // 状態とmainでの状態は時間的な流れがあり、状態遷移が起きる
+    // オブジェクトに値を保持してもらわないと困るのだ。それかrespondに
+    // 状態を持たせるやり方がある。handleの中でやっているのは、状態の決定
+    // requestの状態をパースすることで、responseの状態を決定している。
+    // mainの中でやっているのはある状態をもったresponseオブジェクトに
+    // 送信命令をすること。
+    // 送信命令を受けた、responseはみづからが保持する状態を使って
+    // レスポンス全体を構成する。
+    // レスポンスに新しく状態を持たせるとしたら、
 
     /**
      * レスポンスヘッダーフィールドを表す。
@@ -36,16 +68,6 @@ class HTTPResponse {
      * クライアントに送信する静的ファイルへのファイルパスを保持するレスポンスボディ
      */
     private File messageBody;
-
-    /**
-     * ステータスラインのセッター
-     * @param statusCode ステータスコード
-     */
-    void setStatusLine(String statusCode) {
-        final String httpVersion = "HTTP/1.1";
-        String reasonPhrase = getReasonPhrase(statusCode);
-        this.statusLine = httpVersion + " " + statusCode + " " + reasonPhrase;
-    }
 
     /**
      * ヘッダーフィールドのセッター
@@ -91,7 +113,6 @@ class HTTPResponse {
 
     /**
      * エラーコンテンツを保持するフィールド
-     *
      * @param messageBodyError エラーコンテンツ
      */
     void setMessageBodyError(String messageBodyError) {
@@ -100,7 +121,6 @@ class HTTPResponse {
 
     /**
      * クライアントに送信するリソースを保持するフィールド
-     *
      * @param file 静的ファイル
      */
     void setMessageBody(File file) {
@@ -110,7 +130,6 @@ class HTTPResponse {
     /**
      * 指定されたwebリソースの拡張子を抽出して、Content Typeを決定する。
      * このContent Typeはブラウザが読み込んだリソースを認識するのに役立つ。
-     *
      * @param filename Content Typeを決定するために必要なリソースファイル名
      * @return なし
      */
@@ -134,16 +153,7 @@ class HTTPResponse {
         }
         return contentType;
     }
-    private String getReasonPhrase(String statusCode) {
-        Map<String, String> reasonPhrase = new HashMap<String, String>() {
-            {
-                put("200", "OK");
-                put("404", "Not Found");
-                put("405", "Method not allowed Explained");
-            }
-        };
-        return reasonPhrase.get(statusCode);
-    }
+
     /**
      * テスト用のメソッド
      */
@@ -153,30 +163,31 @@ class HTTPResponse {
 
     /**
      * HTTPレスポンスをクライアントに送信する処理
-     *
-     * @param outputStream 出力先ストリーム
      * @throws IOException IO系の例外
      */
-    public void respond(OutputStream outputStream) throws IOException {
+    public void respond() throws IOException {
         final String CRLF = "\r\n";
+        final String httpVersion = "HTTP/1.1";
+        String statusCodeString = String.valueOf(this.statusCode);
+        String statusLine = httpVersion + " " + statusCodeString +  " " + this.reasonPhrase;
 
         if (this.messageBody != null) {
             DataSource dataSource = new FileDataSource(this.messageBody);
             DataHandler dataHandler = new DataHandler(dataSource);
-            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
-            outputStream.write(responseHeader, 0, responseHeader.length);
-            dataHandler.writeTo(outputStream);
-            outputStream.flush();
-            outputStream.close();
+            byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            this.outputStream.write(responseHeader, 0, responseHeader.length);
+            dataHandler.writeTo(this.outputStream);
+            this.outputStream.flush();
+            this.outputStream.close();
         } else {
-            byte[] responseHeader = (this.statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
+            byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             byte[] responseBody = this.messageBodyError.getBytes();
             byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
             System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
             System.arraycopy(responseBody, 0, responseMessage, responseHeader.length, responseBody.length);
-            outputStream.write(responseMessage, 0, responseMessage.length);
-            outputStream.flush();
-            outputStream.close();
+            this.outputStream.write(responseMessage, 0, responseMessage.length);
+            this.outputStream.flush();
+            this.outputStream.close();
         }
     }
 
