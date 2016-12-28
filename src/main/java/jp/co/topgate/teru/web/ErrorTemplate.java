@@ -24,7 +24,7 @@ class ErrorTemplate extends Template {
         stringBuilder.append("</html>");
 
         String errorContent = new String(stringBuilder);
-        response.setMessageBodyError(errorContent);
+        response.setDynamicBody(errorContent);
     }
 }
 

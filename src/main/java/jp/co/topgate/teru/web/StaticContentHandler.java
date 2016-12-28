@@ -1,6 +1,9 @@
 package jp.co.topgate.teru.web;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.File;
+import java.io.IOException;
 
 /**
  * 静的ファイルサーバ
@@ -12,7 +15,7 @@ class StaticContentHandler extends Handler {
      * @param request HTTPリクエスト
      */
     @Override
-    public void handleGet(HTTPRequest request, HTTPResponse response) {
+    public void handleGet(HTTPRequest request, HTTPResponse response) throws IOException {
 
         if ("GET".equals(request.getRequestMethod())) {
 
@@ -24,8 +27,8 @@ class StaticContentHandler extends Handler {
                 response.setStatusCode(200);
                 response.setReasonPhrase("OK");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
-                response.setMessageBody(file);
-                //response.respond();
+                response.setStaticBody(file);
+                response.respond();
             } else {
                 System.out.println("リソースは存在しませんでした。");
                 response.setStatusCode(404);
@@ -33,7 +36,7 @@ class StaticContentHandler extends Handler {
                 response.setHeader("Content-Type", "text/html");
                 ErrorTemplate errorTemplate = new ErrorTemplate(response);
                 errorTemplate.generate();
-                //response.respond();
+                response.respond();
             }
 
         } else {
@@ -43,7 +46,7 @@ class StaticContentHandler extends Handler {
             response.setHeader("Content-Type", "text/html");
             ErrorTemplate errorTemplate = new ErrorTemplate(response);
             errorTemplate.generate();
-            //response.respond();
+            response.respond();
         }
     }
 }

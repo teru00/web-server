@@ -36,7 +36,7 @@ class DynamicContentHandler extends Handler {
         stringBuilder.append("</html>");
 
         String content = stringBuilder.toString();
-        response.setMessageBodyError(content);
+        response.setDynamicBody(content);
         try {
             response.respond();
         } catch (IOException e) {

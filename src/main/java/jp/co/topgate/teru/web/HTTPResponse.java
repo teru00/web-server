@@ -62,12 +62,12 @@ class HTTPResponse {
     /**
      * エラーコンテンツを保持するレスポンスボディ
      */
-    private String messageBodyError;
+    private String dynamicBody;
 
     /**
      * クライアントに送信する静的ファイルへのファイルパスを保持するレスポンスボディ
      */
-    private File messageBody;
+    private File staticBody;
 
     /**
      * ヘッダーフィールドのセッター
@@ -113,18 +113,18 @@ class HTTPResponse {
 
     /**
      * エラーコンテンツを保持するフィールド
-     * @param messageBodyError エラーコンテンツ
+     * @param dynamicBody エラーコンテンツ
      */
-    void setMessageBodyError(String messageBodyError) {
-        this.messageBodyError = messageBodyError;
+    void setDynamicBody(String dynamicBody) {
+        this.dynamicBody = dynamicBody;
     }
 
     /**
      * クライアントに送信するリソースを保持するフィールド
      * @param file 静的ファイル
      */
-    void setMessageBody(File file) {
-        this.messageBody = file;
+    void setStaticBody(File file) {
+        this.staticBody = file;
     }
 
     /**
@@ -171,8 +171,8 @@ class HTTPResponse {
         String statusCodeString = String.valueOf(this.statusCode);
         String statusLine = httpVersion + " " + statusCodeString +  " " + this.reasonPhrase;
 
-        if (this.messageBody != null) {
-            DataSource dataSource = new FileDataSource(this.messageBody);
+        if (this.staticBody != null) {
+            DataSource dataSource = new FileDataSource(this.staticBody);
             DataHandler dataHandler = new DataHandler(dataSource);
             byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
             this.outputStream.write(responseHeader, 0, responseHeader.length);
@@ -181,7 +181,7 @@ class HTTPResponse {
             this.outputStream.close();
         } else {
             byte[] responseHeader = (statusLine + "\n" + this.getHeadersField() + CRLF).getBytes();
-            byte[] responseBody = this.messageBodyError.getBytes();
+            byte[] responseBody = this.dynamicBody.getBytes();
             byte[] responseMessage = new byte[responseHeader.length + responseBody.length];
             System.arraycopy(responseHeader, 0, responseMessage, 0, responseHeader.length);
             System.arraycopy(responseBody, 0, responseMessage, responseHeader.length, responseBody.length);
