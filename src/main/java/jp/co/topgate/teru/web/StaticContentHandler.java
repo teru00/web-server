@@ -1,5 +1,7 @@
 package jp.co.topgate.teru.web;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ class StaticContentHandler extends Handler {
      * @param request HTTPリクエスト
      */
     @Override
-    public void handleGet(HTTPRequest request, HTTPResponse response) {
+    public void handleGet(HTTPRequest request, HTTPResponse response) throws IOException {
 
         if ("GET".equals(request.getRequestMethod())) {
 
@@ -26,11 +28,7 @@ class StaticContentHandler extends Handler {
                 response.setReasonPhrase("OK");
                 response.setHeader("Content-Type", response.getContentType(file.getName()));
                 response.setStaticBody(file);
-                try {
-                    response.respond();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                response.respond();
             } else {
                 System.out.println("リソースは存在しませんでした。");
                 response.setStatusCode(404);
@@ -38,11 +36,7 @@ class StaticContentHandler extends Handler {
                 response.setHeader("Content-Type", "text/html");
                 ErrorTemplate errorTemplate = new ErrorTemplate(response);
                 errorTemplate.generate();
-                try {
-                    response.respond();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                response.respond();
             }
 
         } else {
@@ -52,11 +46,7 @@ class StaticContentHandler extends Handler {
             response.setHeader("Content-Type", "text/html");
             ErrorTemplate errorTemplate = new ErrorTemplate(response);
             errorTemplate.generate();
-            try {
-                response.respond();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            response.respond();
         }
     }
 }

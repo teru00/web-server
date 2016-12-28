@@ -3,7 +3,13 @@ package jp.co.topgate.teru.web;
 import java.time.LocalDateTime;
 
 public class Message {
+    /**
+     * Messageのid
+     */
     private int id;
+    /**
+     * 
+     */
     private String name;
     private String content;
     private LocalDateTime createdAt;
