@@ -15,7 +15,7 @@ public class HTTPRequestTest {
     @Test
     public void getRequestMethod() {
         getRequestMethodHelper("GET", "GET / HTTP/1.1");
-        getRequestMethodHelper("POST", "POST / HTTP/1.1");
+        getRequestMethodHelper("POST", "POST /program/board HTTP/1.1");
     }
 
     /**

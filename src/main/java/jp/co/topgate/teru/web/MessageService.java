@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  */
 public class MessageService {
 
-    private static in currentId = 0;
+    private static int currentId = 0;
     private static List<Message> messages = new ArrayList<>();
 
     public static void addMessage(Message message) {

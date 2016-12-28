@@ -20,7 +20,6 @@ class HandlerDispatch {
         HandlerMap handlerMap = new HandlerMap();
         Handler handler = handlerMap.getHandler(request.getRequestURI());
 
-        // "GET"はマッジクワード？なので定数化します。
         if (request.getRequestMethod().equals(METHOD_GET)) {
             handler.handleGet(request, response);
         } else if (request.getRequestURI().equals(METHOD_POST)) {

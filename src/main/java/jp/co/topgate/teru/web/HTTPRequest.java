@@ -34,11 +34,15 @@ class HTTPRequest {
             String[] requestLine = line.split(" ");
             this.requestMethod = requestLine[0];
             this.url = requestLine[1];
+
             if (this.requestMethod.equals("POST")) {
                 String contentLengthString = "";
                 int contentLength = 0;
                 while(line != null  && !line.isEmpty()) {
                     line = br.readLine();
+                    if (line == null) {
+                        return;
+                    }
                     System.out.println(line);
                     if (line.startsWith("Content-Length")) {
                         String[] tmp = line.split(" ");
